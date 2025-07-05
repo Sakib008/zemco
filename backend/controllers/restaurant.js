@@ -44,25 +44,24 @@ const getAllRestaurant = async (req, res) => {
 // GET /restaurants/:id – Single restaurant
 const getSingleRestaurant = async (req, res) => {
   try {
-    const { id } = req.param;
-    const foundRestaurant = await Restaurant.findById(id);
-    if (foundRestaurant)
-      res
-        .status(200)
-        .json({
-          message: "Your Restaurant fetched Successfully",
-          Restaurant: foundRestaurant,
-        });
-    res
-      .status(400)
-      .json({ message: "Check Carefully Your Entered Restaurant Id" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Something is getting Wrong , See Carefully",
-        error: error.message,
+    const { id } = req.params;
+    const foundRestaurant = await Restaurant.findById(id)
+      .populate('reviews', 'user rating comment createdAt')
+      .exec();
+    
+    if (foundRestaurant) {
+      res.status(200).json({
+        message: "Your Restaurant fetched Successfully",
+        restaurant: foundRestaurant,
       });
+    } else {
+      res.status(404).json({ message: "Restaurant not found" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Something is getting Wrong , See Carefully",
+      error: error.message,
+    });
   }
 };
 
@@ -97,57 +96,52 @@ const searchRestaurant = async (req, res) => {
 // POST /restaurants/:id – Update address/rating
 const updateRestaurant = async (req, res) => {
   try {
-    const { id } = req.param;
+    const { id } = req.params;
     const data = req.body;
-    if (!id)
-      res
-        .status(400)
-        .json({ message: "Your Entered Id is wrong ,see Carefully" });
-    if (id) {
-      const restaurant = await Restaurant.findById(id);
-      const updatedRestaurant = Object.assign(restaurant, data);
-      const saveRestaurant = await updateRestaurant.save();
-      res
-        .status(201)
-        .json({
-          message: "Your Restaurant got Update",
-          restaurant: saveRestaurant,
-        });
+    
+    if (!id) {
+      return res.status(400).json({ message: "Your Entered Id is wrong ,see Carefully" });
     }
+    
+    const restaurant = await Restaurant.findById(id);
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+    
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate(id, data, { new: true });
+    res.status(200).json({
+      message: "Your Restaurant got Update",
+      restaurant: updatedRestaurant,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Unable to Edit the data ", error: error.message });
+    res.status(500).json({ message: "Unable to Edit the data ", error: error.message });
   }
 };
 
 // DELETE /restaurants/:id
 const deleteRestaurant = async (req, res) => {
   try {
-    const { id } = req.param;
-    if (!id) res.status(400).json({ message: "Unable to find the Restaurant" });
+    const { id } = req.params;
+    
+    if (!id) {
+      return res.status(400).json({ message: "Unable to find the Restaurant" });
+    }
+    
     const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
-      return res
-        .status(404)
-        .json({ error: "This Restaurant is not available" });
+      return res.status(404).json({ error: "This Restaurant is not available" });
     }
-    if (restaurant) {
-      const deleted = await Restaurant.findByIdAndDelete(id);
-      res
-        .status(402)
-        .json({
-          message: "your restaurant deleted successfully",
-          restaurant: deleted,
-        });
-    }
+    
+    const deleted = await Restaurant.findByIdAndDelete(id);
+    res.status(200).json({
+      message: "your restaurant deleted successfully",
+      restaurant: deleted,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Unable to Delete this Restaurant",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Unable to Delete this Restaurant",
+      error: error.message,
+    });
   }
 };
 module.exports = {
