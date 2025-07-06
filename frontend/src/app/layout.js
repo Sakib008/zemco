@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { RestaurantProvider } from "@/context/restaurantContext";
-import Login from "./login/page";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,17 +18,12 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const token = false;
   return (
     <html lang="en" className="">
       <body
         className={` ${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        {!token ? (
-          <Login/>
-        ) : (
-          <RestaurantProvider>{children}</RestaurantProvider>
-        )}
+        <RestaurantProvider>{children}</RestaurantProvider>
       </body>
     </html>
   );
