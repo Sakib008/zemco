@@ -2,7 +2,6 @@
 import Header from "@/components/Header";
 import RestaurantCard from "@/components/RestaurantCard";
 import { useRestaurant } from "@/context/restaurantContext";
-import Image from "next/image";
 
 export default function Home() {
   const { state } = useRestaurant();
