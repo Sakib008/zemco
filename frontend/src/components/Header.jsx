@@ -14,7 +14,7 @@ const Header = () => {
         <input name="search" className="outline-none text-xl w-full" type="search"/>
         <label id="search " className="cursor-pointer"><Search/></label>
       </div>
-      <div className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center">{token ? <img src="" alt="" /> : <span className="">N</span>}</div>
+      <Link href={'/profile'} className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center">{token ? <img src="" alt="" /> : <span className="">N</span>}</Link>
     </header>
   )
 }
