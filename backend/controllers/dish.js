@@ -59,6 +59,7 @@ const editDish = async (req, res) => {
       isVeg: Boolean(isVeg),
     };
     const editDish = foundRestaurant.menu.findByIdAndUpdate(menuId, newDish);
+    await foundRestaurant.save()
 
     res
       .status(201)
@@ -93,3 +94,4 @@ const deleteDish = async(req,res)=>{
   }
 }
 
+module.exports = {createDish,deleteDish,editDish}
