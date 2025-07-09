@@ -1,19 +1,75 @@
 "use client";
+import { useAuth } from "@/context/authContext";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
+  const [errors,setErrors] = useState({});
+  const [isLoading,setIsLoading] = useState(false)
+  const {loginUser} = useAuth(); 
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  
+  useEffect(()=>{
+    usernameRef.current.focus()
+  },[])
 
   const handleFormChange = (e) => {
+    const {name,value} = e.target
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]:value,
+
     }));
+    if(errors[name]){
+      setErrors(prev=>({
+        ...prev,
+        [name] : ''
+      }))
+    }
+
   };
+  const validateForm = ()=>{
+    const newError = {};
+    if(!form.username.trim()){
+    newError.username = "Username is Required"
+    }
+    if(!form.password){
+      newError.password = "Password is Required";
+    }else if(!form.password.length > 8){
+      newError.password = "Password must be at least 8 character"
+    }
+
+    setErrors(newError)
+    return Object.keys(newError).length === 0
+  }
+  const submitForm =async (e)=>{
+    e.preventDefault();
+    if(!validateForm()){
+      if(errors.username){
+        usernameRef.current.focus()
+      }else if(errors.password){
+        passwordRef.current.focus()
+      }
+      return
+    }
+    setIsLoading(true)
+
+    try {
+      await loginUser(form)
+      setForm({username : '',password : ''})
+      setErrors({})
+    } catch (error) {
+      setErrors({ general: "Login failed. Please check your credentials." });
+      passwordRef.current?.focus();
+    }finally{
+      setIsLoading(false)
+    }
+  }
   return (
-    <div className="max-w-screen-xl mx-auto h-[80vh] flex items-center my-20 border-2 rounded-3xl border-violet-800 box-border">
+    <div className="max-w-screen-xl mx-auto h-[80vh] flex items-center my-20 border-2 rounded-3xl bg-slate-50 border-violet-800 box-border">
       <div className="w-1/2 h-full rounded-l-3xl relative overflow-hidden">
         <Image
           className=" object-cover"
@@ -27,15 +83,16 @@ const Login = () => {
       </div>
       <div className="h-full w-1/2 flex items-center justify-center text-purple-900">
         <form
-          action=""
-          className="flex flex-col border-2 border-purple-700 bg-purple-200 p-8 rounded-2xl text-2xl"
+          onSubmit={submitForm}
+          className="flex flex-col shadow-lg shadow-purple-600 bg-white p-8 rounded-3xl text-2xl"
         >
           <div className="flex gap-3 my-3">
             <input
+              ref={usernameRef}
               type="text"
-              name="email"
-              placeholder="Enter Email"
-              value={form.email}
+              name="username"
+              placeholder="Enter username"
+              value={form.username}
               onChange={handleFormChange}
               className="outline-none bg-transparent border-b-2 border-b-purple-800"
               id="email"
@@ -44,6 +101,7 @@ const Login = () => {
           <div className="flex gap-3 my-3">
             <input
               type="text"
+              ref={passwordRef}
               placeholder="Enter Password"
               className="outline-none bg-transparent border-b-2 border-b-purple-800"
               name="password"
@@ -55,7 +113,7 @@ const Login = () => {
           <div>
             <p className="text-lg mt-5">Don't have an account? <Link href={'/signup'} className="text-gray-800 underline-offset-2 underline">Sign up here</Link></p>
           </div>
-          <button type="submit" className="p-2 bg-purple-800 rounded-2xl w-1/2 text-white mt-2 mx-auto">Log In</button>
+          <button type="submit" disabled={isLoading===true} className="p-2 bg-purple-800 rounded-2xl w-1/2 text-white mt-2 mx-auto">{!isLoading ? "Log In": "Submitting"}</button>
         </form>
       </div>
     </div>
