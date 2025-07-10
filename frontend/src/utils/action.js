@@ -1,3 +1,4 @@
+//restaurant reducer action
 const RESTAURANTS_ALL = "restaurant/all";
 const RESTAURANT_SINGLE = "restaurant/single";
 const RESTAURANT_UPDATE = "restaurant/update";

@@ -6,16 +6,15 @@ const login = async (userData)=>{
     try {
         return await axios.post(`${API_BASE_URL}/login`,userData)
     } catch (error) {
-        console.error("Error : ",error.message)
-        throw new error
+        throw error
     }
 }
 const signUp = async (userData)=>{
     try {
         return await axios.post(`${API_BASE_URL}/register`,userData)
     } catch (error) {
-        console.error("Error : ",error.message)
-        throw new error
+      
+        throw error
     }
 }
 

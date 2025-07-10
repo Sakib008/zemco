@@ -10,7 +10,6 @@ export const createReview = async (reviewData) => {
       },
       body: JSON.stringify(reviewData),
     });
-
     if (!response.ok) {
       throw new Error('Failed to create review');
     }

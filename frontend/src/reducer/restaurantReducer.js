@@ -4,11 +4,15 @@ import {
   RESTAURANT_SINGLE,
   RESTAURANT_UPDATE,
   RESTAURANTS_ALL,
+  TOKEN_ADD,
+  USER_ADD,
 } from "@/utils/action";
 
 export const initialState = {
   restaurants: [],
   dish: [],
+  user: {},
+  token : ''
 };
 
 const restaurantReducer = (state, action) => {
@@ -24,8 +28,9 @@ const restaurantReducer = (state, action) => {
           restaurant._id !== action.payload._id ? action.payload : restaurant;
         }),
       };
+    default:
+      return state;
   }
-
 };
 
 export default restaurantReducer;
