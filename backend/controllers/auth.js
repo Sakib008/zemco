@@ -65,7 +65,7 @@ const logUser = async (req, res) => {
         .json({ error: "User not exist with this credentials", username });
     }
     const isMatchPassword = await bcrypt.compare(password, existUser.password);
-    console.log("Mach password : ",isMatchPassword)
+    console.log("Match password : ",isMatchPassword)
     if (!isMatchPassword) {
       return res.status(400).json({ error: "password not matched", password });
     }
