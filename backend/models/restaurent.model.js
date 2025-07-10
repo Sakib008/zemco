@@ -4,7 +4,8 @@ const DishSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: {type : Number,required : true},
   description: {type : String,required : true},
-  isVeg : {type : Boolean, required : true}
+  isVeg : {type : Boolean, required : true},
+  restaurantId : {type : mongoose.Schema.Types.ObjectId , ref : 'Restaurant'}
 });
 
 const RestaurantSchema = new mongoose.Schema({
