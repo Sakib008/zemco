@@ -5,9 +5,8 @@ import {
   RESTAURANT_SINGLE,
   RESTAURANTS_ALL,
 } from "@/utils/action";
-import { allRestaurant, editRestaurant, singleRestaurant } from "@/utils/api";
-import { data } from "autoprefixer";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { addRestaurant, allRestaurant, editRestaurant, singleRestaurant } from "@/utils/api";
+import { createContext, useContext, useReducer } from "react";
 
 export const RestaurantContext = createContext();
 
@@ -41,18 +40,33 @@ export const RestaurantProvider = ({ children }) => {
   };
   const updateRestaurant = async (restaurantId, restaurantData) => {
     try {
-      const { restaurant, status } = await editRestaurant(
-        restaurantId,
-        restaurantData
-      );
-      if (status === 200 || status === 201) {
-        dispatch({ type: RESTAURANT_ADD, payload: restaurant });
+      const formData = new FormData();
+      formData.append('name', restaurantData.name);
+      formData.append('cuisine', restaurantData.cuisine);
+      formData.append('address', restaurantData.address);
+      if (restaurantData.image && restaurantData.image instanceof File) {
+        formData.append('image', restaurantData.image);
       }
-    } catch (error) {}
+      const res = await editRestaurant(restaurantId, formData);
+      if (res.status === 200 || res.status === 201) {
+        dispatch({ type: RESTAURANT_ADD, payload: res.data.restaurant });
+      }
+      return res;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   };
-useEffect(()=>{
-    getAllRestaurant();
-},[])
+  const createRestaurant = async(restaurantData)=>{
+    try {
+      const res = await addRestaurant(restaurantData);
+      if(res.status===200|| res.status===201){
+        console.log("res data : ",res.data)
+      } 
+    } catch (error) {
+      
+    }
+  }
   return (
     <RestaurantContext.Provider
       value={{
