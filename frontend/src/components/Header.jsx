@@ -1,16 +1,18 @@
 'use client'
 
-import { HandPlatter, Search, LogOut } from "lucide-react"
+import { HandPlatter, Search } from "lucide-react"
 import Link from "next/link";
 import { useAuth } from "@/context/authContext";
 import { useRef } from "react";
+import { useTheme } from "@/context/themeContext";
 
 const Header = () => {
-  const { isAuthenticated, user, logoutUser } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const searchRef = useRef()
+  const { theme, toggleTheme } = useTheme();
   
   return (
-    <header className="sticky top-4 z-50 bg-white h-20 max-w-screen-2xl flex items-center justify-between mx-auto px-5 rounded-full m-3 border-2 border-gray-600 ">
+    <header className={`sticky top-4 z-50 ${theme === 'dark' ? 'bg-black border-white text-white' : 'bg-white'}  h-20 max-w-screen-2xl flex items-center justify-between mx-auto px-5 rounded-full m-3 border-2 border-gray-600 `}>
       <Link href={'/'} className="w-12 h-12 bg-gradient-to-br flex items-center justify-center from-purple-600 via-pink-600 to-violet-800 rounded-3xl">
         <HandPlatter className="text-white  w-8 h-8"/>
       </Link>
@@ -20,6 +22,12 @@ const Header = () => {
       </div>
       <div className="flex items-center gap-4">
         <Link href={'/restaurant'} className="text-xl underline underline-offset-2">All Restaurant</Link>
+        <button
+          onClick={toggleTheme}
+          className="px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-200 dark:bg-gray-800 text-black dark:text-white font-semibold transition-colors"
+        >
+          {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
+        </button>
         {isAuthenticated ? (
           <>
             <Link href={'/profile'} className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center">
