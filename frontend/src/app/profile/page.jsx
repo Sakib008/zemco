@@ -1,12 +1,19 @@
 "use client";
 
-import React from 'react';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import { useAuth } from '@/context/authContext';
-import Header from '@/components/Header';
+import React, { useEffect, useState } from "react";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { useAuth } from "@/context/authContext";
+import Header from "@/components/Header";
+import AddRestaurant from "./components/AddRestaurant";
+import AddMenu from "./components/AddMenu";
+import BookedRestaurants from "./components/BookedRestaurants";
 
 const Profile = () => {
   const { user, logoutUser } = useAuth();
+  const [tab, setTab] = useState("info");
+  const [openRestaurant, setOpenRestaurant] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [openBooked, setOpenBooked] = useState(false);
 
   return (
     <ProtectedRoute>
@@ -14,34 +21,89 @@ const Profile = () => {
         <Header />
         <div className="max-w-4xl mx-auto p-6">
           <div className="bg-white rounded-3xl shadow-lg p-8">
-            <h1 className="text-4xl font-bold text-purple-800 mb-8 text-center">
-              Profile
-            </h1>
+            <div className="flex w-full mx-auto justify-center">
+              <div className="mx-10">
+                <h1 className="text-4xl font-bold text-purple-800 mb-8 text-center">
+                  Profile
+                </h1>
+                <div className="flex items-center justify-center mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-purple-600 via-pink-600 to-violet-800 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+                    {user?.username
+                      ? user.username.charAt(0).toUpperCase()
+                      : "U"}
+                  </div>
+                </div>
+              </div>
+              <div className="sticky top-5 right-10 flex justify-center flex-col items-start">
+                <>
+                  <button
+                    onClick={() => setOpenRestaurant(true)}
+                    className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
+                  >
+                    Add Restaurant
+                  </button>
+                  <AddRestaurant
+                    open={openRestaurant}
+                    setOpen={setOpenRestaurant}
+                  />
+                </>
+                <>
+                  <button
+                    onClick={() => setOpenMenu(true)}
+                    className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
+                  >
+                    Add Menu
+                  </button>
+                  <AddMenu open={openMenu} setOpen={setOpenMenu} />
+                </>
+              </div>
+            </div>
             
             <div className="space-y-6">
-              <div className="flex items-center justify-center mb-8">
-                <div className="w-24 h-24 bg-gradient-to-br from-purple-600 via-pink-600 to-violet-800 rounded-full flex items-center justify-center text-white text-3xl font-bold">
-                  {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
+              {tab === "info" && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <span className="font-semibold text-gray-700">
+                      Username:
+                    </span>
+                    <span className="text-purple-800">
+                      {user?.username || "N/A"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <span className="font-semibold text-gray-700">Email:</span>
+                    <span className="text-purple-800">
+                      {user?.email || "N/A"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                    <span className="font-semibold text-gray-700">
+                      Account Type:
+                    </span>
+                    <span className="text-purple-800">
+                      {user?.role || "User"}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                  <span className="font-semibold text-gray-700">Username:</span>
-                  <span className="text-purple-800">{user?.username || 'N/A'}</span>
-                </div>
-                
-                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                  <span className="font-semibold text-gray-700">Email:</span>
-                  <span className="text-purple-800">{user?.email || 'N/A'}</span>
-                </div>
-                
-                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                  <span className="font-semibold text-gray-700">Account Type:</span>
-                  <span className="text-purple-800">{user?.role || 'User'}</span>
-                </div>
-              </div>
-              
+              )}
+
+              {tab === "booked" && (
+                <>
+                  <button
+                    onClick={() => setOpenBooked(true)}
+                    className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
+                  >
+                    Book Restaurant
+                  </button>
+                  <BookedRestaurants
+                    open={openBooked}
+                    setOpen={setOpenBooked}
+                  />
+                </>
+              )}
+
               <div className="flex justify-center mt-8">
                 <button
                   onClick={logoutUser}
