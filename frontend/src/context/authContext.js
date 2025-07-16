@@ -1,103 +1,89 @@
 "use client"
 
-import Cookies from "js-cookie";
+import { login, signUp, logout, getMe } from "@/utils/api/auth";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-const { login, signUp } = require("@/utils/api");
-const { createContext, useContext, useState, useEffect } = require("react");
 
 const AuthContext = createContext();
 
-const AuthProvider = ({children})=>{
-    const [token, setToken] = useState('');
-    const [user, setUser] = useState({});
+const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
-        const storedToken = Cookies.get('token');
-        const storedUser = Cookies.get('user');
-        
-        if (storedToken) {
+        const checkAuth = async () => {
+            setIsLoading(true);
             try {
-                setToken(storedToken);
-            } catch (error) {
-                setToken(storedToken);
+                const res = await getMe();
+                setUser(res.data.user);
+            } catch (err) {
+                setUser(null);
+            } finally {
+                setIsLoading(false);
             }
-        }
-        
-        if (storedUser) {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (error) {
-                setUser(storedUser);
-            }
-        }
-        
-        setIsLoading(false);
+        };
+        checkAuth();
     }, []);
 
-    const loginUser = async (userData)=>{
+    const loginUser = async (userData) => {
         try {
-            const {username,password} = userData
-            if(!username || !password){
-                throw new Error("All fiels are required")
-            }
-            const res = await login({username, password});
-            const {data : {user, token}, status} = res;
-            if(status === 200 || status === 201){
-                localStorage.setItem("user",  JSON.stringify(user))
-                Cookies.set("token", token, {path : '/'})
-                setToken(token);
-                setUser(user);
-                router.push('/');
+            const res = await login(userData);
+            if (res.status === 200 || res.status === 201) {
+                // After login, fetch user info
+                const meRes = await getMe();
+                setUser(meRes.data.user);
+                router.push("/");
             }
         } catch (error) {
-            throw error
+            throw error;
         }
-    }
-    const signupUser = async (userData)=>{
+    };
+
+    const signupUser = async (userData) => {
         try {
             const res = await signUp(userData);
-            const {data : {user, token}, status} = res;
-            console.log("Response  : ",res)
-            if(status === 200 || status === 201){
-               localStorage.setItem("user", JSON.stringify(user))
-                Cookies.set('token', token, {path : '/'})
-                setToken(token);
-                setUser(user);
-                router.push('/');
+            if (res.status === 200 || res.status === 201) {
+                // After signup, fetch user info
+                const meRes = await getMe();
+                setUser(meRes.data.user);
+                router.push("/");
             }
         } catch (error) {
-            throw error
+            throw error;
         }
-    }
+    };
 
-    const logoutUser = () => {
-        Cookies.remove('token', {path : '/'});
-        localStorage.removeItem('user');
-        setToken('');
-        setUser({});
-        router.push('/login');
-    }
+    const logoutUser = async () => {
+        try {
+            await logout();
+        } catch (error) {
+            
+        } finally {
+            setUser(null);
+            router.push("/login");
+        }
+    };
 
-    const isAuthenticated = !!token;
+    const isAuthenticated = !!user;
+    const role = user && user.isAdmin ? "admin" : "user";
 
     return (
-        <AuthContext.Provider value={{
-            token,
-            user,
-            isLoading,
-            isAuthenticated,
-            loginUser,
-            signupUser,
-            logoutUser
-        }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                role,
+                isLoading,
+                isAuthenticated,
+                loginUser,
+                signupUser,
+                logoutUser,
+            }}
+        >
             {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
 export default AuthProvider;
-
-export const useAuth = ()=> useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);
