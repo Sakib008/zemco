@@ -1,14 +1,13 @@
 require('dotenv').config()
-const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user.model");
 const jwtSecret = process.env.JWT_SECRET;
 const createUser = async (req, res) => {
   try {
     const user = req.body;
     const { username, email, password, firstname, lastname } = user;
     const foundByUsername = await User.findOne({ username });
-    console.log("foundUser", foundByUsername);
     const foundByEmail = await User.findOne({ email });
 
     if (!username || !email || !password || !firstname || !lastname) {
@@ -31,9 +30,14 @@ const createUser = async (req, res) => {
     const token = jwt.sign({ id: newUser._id, username }, jwtSecret, {
       expiresIn: "15d",
     });
-
     await newUser.save();
-
+    const isAdmin = newUser.isAdmin
+     res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+    });
     res.status(201).json({
       message: "User Created Successfully, Now Login",
       user: newUser,
@@ -65,13 +69,18 @@ const logUser = async (req, res) => {
         .json({ error: "User not exist with this credentials", username });
     }
     const isMatchPassword = await bcrypt.compare(password, existUser.password);
-    console.log("Match password : ",isMatchPassword)
     if (!isMatchPassword) {
       return res.status(400).json({ error: "password not matched", password });
     }
-    console.log("user : ",existUser)
     const token = jwt.sign({id: existUser._id,username}, jwtSecret, { expiresIn: "15d" });
-    console.log("token : ",token)
+    const isAdmin = existUser.isAdmin;
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+    });
+     
     res.status(200).json({
       message: "User Fetched Successfully",
       user: existUser,
@@ -83,4 +92,23 @@ const logUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, logUser };
+const logoutUser = (req, res) => {
+try {
+  console.log("logging out user ")
+  res.cookie('token', '', { maxAge: 0, path: '/' });
+  res.status(200).json({ message: "Logged out successfully" });
+  
+} catch (error) {
+  console.error("Error in loggout : ",error.message)
+  throw error
+}
+};
+
+const getMe = (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  res.status(200).json({ user: req.user });
+};
+
+module.exports = { createUser, logUser, logoutUser, getMe };
