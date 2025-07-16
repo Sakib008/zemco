@@ -1,8 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useRestaurant } from "@/context/restaurantContext";
 
 const AddRestaurant = ({ open, setOpen, preFilled }) => {
   const [form, setForm] = useState(preFilled || { name: "", cuisine: "indian", address: "", image: null });
   const [imagePreview, setImagePreview] = useState(preFilled?.image || null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { updateRestaurant, } = useRestaurant();
   const allowedCuisine = [
     "indian",
     "chinese",
@@ -38,9 +42,26 @@ const AddRestaurant = ({ open, setOpen, preFilled }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setOpen(false);
+    setError("");
+    setLoading(true);
+    try {
+      if (preFilled && preFilled._id) {
+        // Update restaurant
+        await updateRestaurant(preFilled._id, form);
+      } else {
+        // TODO: Add restaurant logic if needed
+      }
+      setOpen(false);
+      setForm({ name: "", cuisine: "indian", address: "", image: null });
+      setImagePreview(null);
+
+    } catch (err) {
+      setError("Failed to update restaurant. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!open) return null;
@@ -51,6 +72,7 @@ const AddRestaurant = ({ open, setOpen, preFilled }) => {
         <button className="absolute top-2 right-2 text-gray-500 hover:text-red-500" onClick={() => setOpen(false)}>&times;</button>
         <h2 className="text-2xl font-bold mb-4">{preFilled ? 'Edit Restaurant' : 'Add Restaurant'}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && <div className="text-red-500 text-sm">{error}</div>}
           <div>
             <label className="block font-semibold">Name</label>
             <input type="text" name="name" value={form.name} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
@@ -69,7 +91,7 @@ const AddRestaurant = ({ open, setOpen, preFilled }) => {
           </div>
           <div>
             <label className="block font-semibold">Image</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} ref={fileInputRef} className="w-full" />
+            <input type="file" name="image" accept="image/*" onChange={handleImageChange} ref={fileInputRef} className="w-full" />
             {imagePreview && (
               <div className="mt-2">
                 <img src={imagePreview} alt="Preview" className="w-20 h-20 object-cover rounded" />
@@ -78,7 +100,7 @@ const AddRestaurant = ({ open, setOpen, preFilled }) => {
           </div>
           <div className="flex justify-end gap-2">
             <button type="button" className="px-4 py-2 rounded bg-gray-300" onClick={() => setOpen(false)}>Cancel</button>
-            <button type="submit" className="px-4 py-2 rounded bg-red-500 text-white">{preFilled ? 'Update' : 'Add'}</button>
+            <button type="submit" className="px-4 py-2 rounded bg-red-500 text-white" disabled={loading}>{loading ? (preFilled ? 'Updating...' : 'Adding...') : (preFilled ? 'Update' : 'Add')}</button>
           </div>
         </form>
       </div>
