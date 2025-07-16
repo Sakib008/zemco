@@ -12,7 +12,7 @@ const RestaurantCard = ({ restaurant }) => {
       {
         <div
           
-          className="w-96 bg-slate-100 rounded-3xl"
+          className="w-96 shadow-lg rounded-3xl"
         >
           <div className="m-4 mx-auto w-80 h-72 pt-4 rounded-3xl">
             {nextImage ? (
