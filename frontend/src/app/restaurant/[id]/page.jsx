@@ -10,6 +10,7 @@ import AddRestaurant from "@/app/profile/components/AddRestaurant";
 import Image from "next/image";
 import { useTheme } from "@/context/themeContext";
 import AddMenu from "@/app/profile/components/AddMenu";
+import Dish from "../components/Menu";
 
 const RestaurantPage = () => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ const RestaurantPage = () => {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const { theme } = useTheme();
+  const [openDish, setOpenDish] = useState(false);
 
   // Fetch restaurant details and reviews
   const fetchRestaurantData = async () => {
@@ -228,25 +230,9 @@ const RestaurantPage = () => {
               <h3 className="text-xl font-semibold mb-4">Menu</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {restaurant.menu.map((dish, index) => (
-                  <div className="border rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold">{dish.name}</h4>
-                      <span className="text-green-600 font-semibold">
-                        ₹{dish.price}
-                      </span>
-                    </div>
-                    <p className="text-gray-600 text-sm mb-2">
-                      {dish.description}
-                    </p>
-                    <span
-                      className={`inline-block px-2 py-1 rounded text-xs ${
-                        dish.isVeg
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {dish.isVeg ? "Vegetarian" : "Non-Vegetarian"}
-                    </span>
+                  <div key={index} onClick={() => setOpenDish(true)} className="cursor-pointer">
+
+                    <Dish dish={dish} open={openDish} setOpen={setOpenDish} restaurantId={restaurant._id} />
                   </div>
                 ))}
               </div>
