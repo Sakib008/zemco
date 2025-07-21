@@ -1,16 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/context/authContext";
 import Header from "@/components/Header";
 import AddRestaurant from "./components/AddRestaurant";
-import AddMenu from "./components/AddMenu";
 
 const Profile = () => {
   const { user, logoutUser } = useAuth();
   const [openRestaurant, setOpenRestaurant] = useState(false);
-  const [openMenu, setOpenMenu] = useState(false);
 
   return (
     <ProtectedRoute>
