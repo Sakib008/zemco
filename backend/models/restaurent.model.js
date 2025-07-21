@@ -11,7 +11,7 @@ const DishSchema = new mongoose.Schema({
 
 const RestaurantSchema = new mongoose.Schema({
   name:       { type: String, required: true, unique: true },
-  cuisine:    { type: String, required: true ,enum : ['indian',"chinese",'mughlai','south indian','punjabi','fusion','rajasthani','kerala','multi-cuisine'] },
+  cuisine:    { type: String, required: true ,enum : ['Indian',"Chinese",'Mughlai','South Indian','Punjabi','Fusion','Rajasthani','Kerala','Multi-Cuisine'] },
   address:    { type: String, required: true },
   averageRating: { type: Number, default: 0 },
   image : {type : String},
