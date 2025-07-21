@@ -84,7 +84,7 @@ const Signup = () => {
       await signupUser({
         firstname,lastname,username,email,password,isAdmin
       });
-      setForm({firstname : '',lastname : '', username: "", email: "", password: "", confirmPassword: "" });
+      setForm({firstname : '',lastname : '', username: "", email: "", password: "", confirmPassword: "",isAdmin : false });
       setErrors({});
     } catch (error) {
       console.error(error)
