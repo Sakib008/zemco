@@ -12,18 +12,19 @@ export const initialState = {
   filteredRestaurants: [],
   dish: [],
   user: {},
-  token: '',
+  token: "",
   filter: {
     cuisines: [],
     dishes: [],
-    rating: '',
+    rating: "",
   },
 };
 
 const filterRestaurants = (restaurants, filter) => {
   return restaurants.filter((restaurant) => {
     const cuisineMatch =
-      filter.cuisines.length === 0 || filter.cuisines.includes(restaurant.cuisine);
+      filter.cuisines.length === 0 ||
+      filter.cuisines.includes(restaurant.cuisine);
     const dishMatch =
       filter.dishes.length === 0 ||
       restaurant.menu.some((dish) => filter.dishes.includes(dish.name));
@@ -56,12 +57,16 @@ const restaurantReducer = (state, action) => {
         restaurants: updatedRestaurants,
       };
     case SET_FILTER:
+      const newFilter = { ...state.filter, ...action.payload };
       return {
         ...state,
-        filter: { ...state.filter, ...action.payload },
+        filter: newFilter,
       };
-    case CLEAR_FILTER : 
-    return {...state,filter : {cuisines : [],dishes : [],rating : null}}
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        filter: { cuisines: [], dishes: [], rating: null },
+      };
     default:
       return state;
   }
