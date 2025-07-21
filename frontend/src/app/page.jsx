@@ -9,9 +9,8 @@ import { useEffect } from "react";
 export default function Home() {
   const { state, getAllRestaurant } = useRestaurant();
   useEffect(() => {
-    getAllRestaurant();
+     getAllRestaurant();
   }, [state.restaursts]);
-  console.log("All State Restaurant : ",state.restaurants)
   return (
     <>
       <Header />
@@ -33,7 +32,7 @@ export default function Home() {
           {state.restaurants.length === 0 ? (
             <p className="text-8xl text-center m-10 font-bold">Loading...</p>
           ) : (
-            state.restaurants.map((restaurant) => (
+            state.restaurants.sort((a,b)=>b.averageRating-a.averageRating).slice(0,5).map((restaurant) => (
               <Link href={`restaurant/${restaurant._id}`} key={restaurant._id}>
                 <RestaurantCard restaurant={restaurant} />
               </Link>
