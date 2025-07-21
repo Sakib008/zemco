@@ -2,11 +2,10 @@
 import restaurantReducer, { initialState } from "@/reducer/restaurantReducer";
 import {
   RESTAURANT_ADD,
-  RESTAURANT_SINGLE,
   RESTAURANTS_ALL,
 } from "@/utils/action";
-import { addRestaurant, allRestaurant, editRestaurant, singleRestaurant } from "@/utils/api";
-import { createContext, useContext, useReducer } from "react";
+import { addMenuToRestaurant, addRestaurant, allRestaurant, deleteMenuItem, editMenuItem, editRestaurant, removeRestaurant, singleRestaurant } from "@/utils/api";
+import { createContext, useContext, useReducer, useState } from "react";
 
 export const RestaurantContext = createContext();
 
@@ -24,57 +23,95 @@ export const RestaurantProvider = ({ children }) => {
     }
   };
 
-  const getSingleRestaurant = async (restaurantId) => {
-    try {
-      const { data :{Restaurant}, status } = await singleRestaurant(restaurantId);
-     
-      if (status === 200 || status === 201) {
-        dispatch({ type: RESTAURANT_ADD, payload: Restaurant });
-      }else{
-        console.log('This is already Exist')
-      }
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
   const updateRestaurant = async (restaurantId, restaurantData) => {
     try {
-      const formData = new FormData();
-      formData.append('name', restaurantData.name);
-      formData.append('cuisine', restaurantData.cuisine);
-      formData.append('address', restaurantData.address);
-      if (restaurantData.image && restaurantData.image instanceof File) {
-        formData.append('image', restaurantData.image);
-      }
-      const res = await editRestaurant(restaurantId, formData);
+      const res = await editRestaurant(restaurantId, restaurantData);
       if (res.status === 200 || res.status === 201) {
         dispatch({ type: RESTAURANT_ADD, payload: res.data.restaurant });
       }
       return res;
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
       throw error;
     }
   };
   const createRestaurant = async(restaurantData)=>{
     try {
-      const res = await addRestaurant(restaurantData);
-      if(res.status===200|| res.status===201){
-        console.log("res data : ",res.data)
+     
+      const {data : {restaurant},status} = await addRestaurant(restaurantData);
+      if(status===200|| status===201){
+        dispatch({type : RESTAURANT_ADD,payload : restaurant})
       } 
     } catch (error) {
-      
+      console.error(error)
+      throw error
     }
   }
+  const deleteRestaurant = async (restaurantId) => {
+    try {
+      const res = await removeRestaurant(restaurantId, { isDeleted: true });
+      if (res.status === 200 || res.status === 201) {
+        dispatch({ type: RESTAURANT_ADD, payload: res.data.restaurant });
+      }
+      return res;
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  };
+  const createMenu = async (restaurantId, menuData) => {
+    try {
+      const res = await addMenuToRestaurant(restaurantId, menuData);
+      if (res.status === 200 || res.status === 201) {
+        const updatedRestaurant = res.data.restaurant;
+        dispatch({ type: RESTAURANT_ADD, payload: updatedRestaurant });
+      }
+      return res;
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    } 
+  }
+  const editMenu = async (restaurantId, menuId, menuData) => {
+    try {
+      const res = await editMenuItem(restaurantId, menuId, menuData);
+      if (res.status === 200 || res.status === 201) {
+        const updatedRestaurant = res.data.restaurant;
+        dispatch({ type: RESTAURANT_ADD, payload: updatedRestaurant });
+      }
+      return res;
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  };
+  const deleteMenu = async (restaurantId, menuId) => {
+    try {
+      const res = await deleteMenuItem(restaurantId, menuId);
+      if (res.status === 200 || res.status === 201) {
+        const updatedRestaurant = res.data.restaurant;
+        dispatch({ type: RESTAURANT_ADD, payload: updatedRestaurant });
+      }
+      return res;
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  };
+
+
+
+
   return (
     <RestaurantContext.Provider
       value={{
         state,
         dispatch,
         getAllRestaurant,
-        getSingleRestaurant,
         updateRestaurant,
+        createRestaurant,
+        editMenu,createMenu,
+        deleteMenu,deleteRestaurant
       }}
     >
       {children}
