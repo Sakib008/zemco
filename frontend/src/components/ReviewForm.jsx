@@ -1,10 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import { createReview } from '../utils/api/review';
+import { useAuth } from '@/context/authContext';
+import { useTheme } from '@/context/themeContext';
 
 const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
+  const {user} = useAuth()
+  const {theme} = useTheme()
   const [formData, setFormData] = useState({
-    user: '',
+    user: `${user.firstname} ${user.lastname}`,
     rating: 5,
     comment: ''
   });
@@ -34,7 +38,7 @@ const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
       
       // Reset form
       setFormData({
-        user: '',
+        user: `${user.firstname} ${user.lastname}`,
         rating: 5,
         comment: ''
       });
@@ -53,7 +57,7 @@ const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className={`bg-white p-6 rounded-lg shadow-md ${theme==="dark" && "bg-slate-900 text-white shadow-md shadow-blue-700 rounded-2xl"}`}>
       <h3 className="text-xl font-semibold mb-4">Write a Review</h3>
       
       {error && (
@@ -64,22 +68,6 @@ const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="user" className="block text-sm font-medium text-gray-700 mb-1">
-            Your Name
-          </label>
-          <input
-            type="text"
-            id="user"
-            name="user"
-            value={formData.user}
-            onChange={handleInputChange}
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-            placeholder="Enter your name"
-          />
-        </div>
-
-        <div>
           <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">
             Rating
           </label>
@@ -89,7 +77,7 @@ const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
             value={formData.rating}
             onChange={handleInputChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 ${theme==="dark" && "bg-slate-900 text-white"}`}
           >
             <option value="5">⭐⭐⭐⭐⭐ Excellent (5)</option>
             <option value="4">⭐⭐⭐⭐ Very Good (4)</option>
@@ -110,7 +98,7 @@ const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
             onChange={handleInputChange}
             required
             rows="4"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 ${theme==="dark" && "bg-slate-900 text-white"}`}
             placeholder="Share your experience with this restaurant..."
           />
         </div>
