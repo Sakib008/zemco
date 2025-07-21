@@ -73,7 +73,6 @@ const logUser = async (req, res) => {
       return res.status(400).json({ error: "password not matched", password });
     }
     const token = jwt.sign({id: existUser._id,username}, jwtSecret, { expiresIn: "15d" });
-    const isAdmin = existUser.isAdmin;
       res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
