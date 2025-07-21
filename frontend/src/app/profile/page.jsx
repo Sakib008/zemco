@@ -11,7 +11,6 @@ const Profile = () => {
   const { user, logoutUser } = useAuth();
   const [openRestaurant, setOpenRestaurant] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  
 
   return (
     <ProtectedRoute>
@@ -33,8 +32,7 @@ const Profile = () => {
                 </div>
               </div>
               {user?.isAdmin && (
-                <div className="sticky top-5 right-10 flex justify-center flex-col items-start">
-                  <>
+                <div className="sticky top-5 right-10 flex justify-center flex-col items-center">
                     <button
                       onClick={() => setOpenRestaurant(true)}
                       className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
@@ -45,16 +43,6 @@ const Profile = () => {
                       open={openRestaurant}
                       setOpen={setOpenRestaurant}
                     />
-                  </>
-                  <>
-                    <button
-                      onClick={() => setOpenMenu(true)}
-                      className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
-                    >
-                      Add Menu
-                    </button>
-                    <AddMenu open={openMenu} setOpen={setOpenMenu} />
-                  </>
                 </div>
               )}
             </div>
