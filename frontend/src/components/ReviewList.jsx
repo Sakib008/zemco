@@ -1,7 +1,11 @@
 'use client';
+import { useAuth } from '@/context/authContext';
+import { useTheme } from '@/context/themeContext';
 import React from 'react';
 
 const ReviewList = ({ reviews, onDeleteReview }) => {
+  const {theme} = useTheme()
+  const {user} = useAuth()
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -24,7 +28,7 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
 
   if (!reviews || reviews.length === 0) {
     return (
-      <div className="text-center py-8">
+      <div className={`text-center py-8 ${theme==="dark" && "bg-slate-900 text-white"}`}>
         <p className="text-gray-500 text-lg">No reviews yet. Be the first to review this restaurant!</p>
       </div>
     );
@@ -35,10 +39,10 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
       <h3 className="text-xl font-semibold mb-4">Customer Reviews ({reviews.length})</h3>
       
       {reviews.map((review) => (
-        <div key={review._id} className="bg-white p-4 rounded-lg shadow-sm border">
+        <div key={review._id} className={`bg-white p-4 rounded-lg shadow-sm border ${theme==="dark" && "bg-slate-900 text-white"}`}>
           <div className="flex justify-between items-start mb-2">
             <div>
-              <h4 className="font-semibold text-gray-800">{review.user}</h4>
+              <h4 className="font-semibold ">{review.user}</h4>
               <div className="flex items-center space-x-2">
                 <div className="flex">
                   {renderStars(review.rating)}
@@ -51,9 +55,9 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
             </span>
           </div>
           
-          <p className="text-gray-700 mt-2">{review.comment}</p>
+          <p className={`text-gray-700 mt-2 ${theme==='dark' && 'text-gray-200'}`}>{review.comment}</p>
           
-          {onDeleteReview && (
+          {review.user===`${user.firstname} ${user.lastname}` && onDeleteReview && (
             <button
               onClick={() => onDeleteReview(review._id)}
               className="mt-2 text-red-500 text-sm hover:text-red-700"
