@@ -6,14 +6,12 @@ import { useAuth } from "@/context/authContext";
 import Header from "@/components/Header";
 import AddRestaurant from "./components/AddRestaurant";
 import AddMenu from "./components/AddMenu";
-import BookedRestaurants from "./components/BookedRestaurants";
 
 const Profile = () => {
   const { user, logoutUser } = useAuth();
-  const [tab, setTab] = useState("info");
   const [openRestaurant, setOpenRestaurant] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  const [openBooked, setOpenBooked] = useState(false);
+  
 
   return (
     <ProtectedRoute>
@@ -34,75 +32,58 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-              <div className="sticky top-5 right-10 flex justify-center flex-col items-start">
-                <>
-                  <button
-                    onClick={() => setOpenRestaurant(true)}
-                    className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
-                  >
-                    Add Restaurant
-                  </button>
-                  <AddRestaurant
-                    open={openRestaurant}
-                    setOpen={setOpenRestaurant}
-                  />
-                </>
-                <>
-                  <button
-                    onClick={() => setOpenMenu(true)}
-                    className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
-                  >
-                    Add Menu
-                  </button>
-                  <AddMenu open={openMenu} setOpen={setOpenMenu} />
-                </>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              {tab === "info" && (
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                    <span className="font-semibold text-gray-700">
-                      Username:
-                    </span>
-                    <span className="text-purple-800">
-                      {user?.username || "N/A"}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                    <span className="font-semibold text-gray-700">Email:</span>
-                    <span className="text-purple-800">
-                      {user?.email || "N/A"}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                    <span className="font-semibold text-gray-700">
-                      Account Type:
-                    </span>
-                    <span className="text-purple-800">
-                      {user?.role || "User"}
-                    </span>
-                  </div>
+              {user?.isAdmin && (
+                <div className="sticky top-5 right-10 flex justify-center flex-col items-start">
+                  <>
+                    <button
+                      onClick={() => setOpenRestaurant(true)}
+                      className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
+                    >
+                      Add Restaurant
+                    </button>
+                    <AddRestaurant
+                      open={openRestaurant}
+                      setOpen={setOpenRestaurant}
+                    />
+                  </>
+                  <>
+                    <button
+                      onClick={() => setOpenMenu(true)}
+                      className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
+                    >
+                      Add Menu
+                    </button>
+                    <AddMenu open={openMenu} setOpen={setOpenMenu} />
+                  </>
                 </div>
               )}
+            </div>
 
-              {tab === "booked" && (
-                <>
-                  <button
-                    onClick={() => setOpenBooked(true)}
-                    className="bg-purple-700 text-white px-6 py-2 rounded-2xl font-semibold mb-4"
-                  >
-                    Book Restaurant
-                  </button>
-                  <BookedRestaurants
-                    open={openBooked}
-                    setOpen={setOpenBooked}
-                  />
-                </>
-              )}
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                  <span className="font-semibold text-gray-700">Username:</span>
+                  <span className="text-purple-800">
+                    {user?.username || "N/A"}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                  <span className="font-semibold text-gray-700">Email:</span>
+                  <span className="text-purple-800">
+                    {user?.email || "N/A"}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                  <span className="font-semibold text-gray-700">
+                    Account Type:
+                  </span>
+                  <span className="text-purple-800">
+                    {user?.isAdmin ? "Admin" : "User"}
+                  </span>
+                </div>
+              </div>
 
               <div className="flex justify-center mt-8">
                 <button
