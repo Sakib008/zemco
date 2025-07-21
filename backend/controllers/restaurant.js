@@ -3,20 +3,24 @@ const Restaurant = require("../models/restaurent.model");
 const createRestaurant = async (req, res) => {
   try {
     const { name, cuisine, address, menu } = req.body;
-
+    const isAdmin = req.user.isAdmin;
+    if(!isAdmin){
+      return res.status(404).json({message : "You are not authorized to do this.(Only for Admin)"})
+    }
     const exists = await Restaurant.findOne({ name });
     if (exists)
       return res.status(400).json({ message: "Restaurant already exists" });
-
+    const imageUrl = req.file ? req.file.path : undefined;
     const newRestaurant = new Restaurant({
       name,
       cuisine,
       address,
       menu,
+      image : imageUrl
     });
 
     const savedRestaurant = await newRestaurant.save();
-    res.status(201).json(savedRestaurant);
+    res.status(201).json({message : "your restaurant got added", restaurant : savedRestaurant});
   } catch (error) {
     res
       .status(500)
@@ -32,7 +36,7 @@ const getAllRestaurant = async (req, res) => {
       restaurants,
     });
   } catch (error) {
-    console.error(error);
+    console.error({ message: "Error fetching restaurants", error: error.message });
     res.status(500).json({
       message: "There is something bad on Server.",
       error: error.message,
@@ -97,18 +101,27 @@ const searchRestaurant = async (req, res) => {
 const updateRestaurant = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = req.body;
-    
+
+    const {name,cuisine,address} = req.body;
+    const isAdmin = req.user.isAdmin;
+    if(!isAdmin){
+      return res.status(404).json({message : "You are not authorized to do this.(Only for Admin)"})
+    }
     if (!id) {
       return res.status(400).json({ message: "Your Entered Id is wrong ,see Carefully" });
     }
-    
+
     const restaurant = await Restaurant.findById(id);
+    
     if (!restaurant) {
       return res.status(404).json({ message: "Restaurant not found" });
     }
-    
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(id, data, { new: true });
+    const imageUrl = req.file ? req.file.path : undefined ;
+
+    const newRestaurant = ({
+      name,address,cuisine,image : imageUrl
+    })
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate(id, newRestaurant, { new: true });
     res.status(200).json({
       message: "Your Restaurant got Update",
       restaurant: updatedRestaurant,
@@ -122,7 +135,10 @@ const updateRestaurant = async (req, res) => {
 const deleteRestaurant = async (req, res) => {
   try {
     const { id } = req.params;
-    
+    const isAdmin = req.user.isAdmin;
+    if(!isAdmin){
+      return res.status(404).json({message : "You are not authorized to do this.(Only for Admin)"})
+    }
     if (!id) {
       return res.status(400).json({ message: "Unable to find the Restaurant" });
     }
