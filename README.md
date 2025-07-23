@@ -34,6 +34,25 @@ zomato-clone/
 
 ---
 
+## 💻 Screenshots
+
+### Home Page
+
+![Home](https://drive.google.com/uc?export=view&id=10PS5qDTyPYLZGP7_TdCkLSKVU876Qwfq)
+
+### Restaurants Page
+
+![Restaurants](https://drive.google.com/uc?export=view&id=1Oa3tv2DPJvhQBmjoMEdMhDs4WuR8381F)
+#### -- Dark Theme
+![darkRestaurnats](https://drive.google.com/uc?export=view&id=1zq7gC2ZQbeKdMc0nS5SZsCA-wn7wtJYP)
+
+### Single Restaurant Page
+
+![Image](https://drive.google.com/uc?export=view&id=1QsAaVp4T6RfYXKUdqA0ZTXaiSdnHtS2p)
+
+
+---
+
 ## ⚙️ Setup Instructions
 
 ### 1. Clone the Repository
