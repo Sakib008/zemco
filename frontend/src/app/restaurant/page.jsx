@@ -61,7 +61,7 @@ const Restaurant = () => {
       <Header />
       <section className="relative max-w-screen-2xl flex mx-auto">
         <button
-  className="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-full shadow"
+  className={`md:hidden fixed top-4 left-4 z-50 p-2 rounded-full shadow ${theme === 'dark' ? 'bg-gray-800 border-2 border-white text-white' : 'bg-white text-black'}`}
   onClick={() => setShowFilter(true)}
 >
   <Filter/>
@@ -83,7 +83,7 @@ const Restaurant = () => {
             </div>
           </div>
         )}
-        <main className=" flex flex-wrap gap-4 mx-auto p-6">
+        <main className=" flex flex-wrap gap-4 justify-center p-6">
           {restaurantOnPage.map((restaurant) => (
             <Link href={`restaurant/${restaurant._id}`} key={restaurant._id}>
               <RestaurantCard restaurant={restaurant} />

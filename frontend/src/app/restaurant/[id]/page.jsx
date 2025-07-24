@@ -11,6 +11,8 @@ import Image from "next/image";
 import { useTheme } from "@/context/themeContext";
 import AddMenu from "@/app/profile/components/AddMenu";
 import Dish from "../components/Menu";
+import { MoveLeft } from "lucide-react";
+import Link from "next/link";
 
 const RestaurantPage = () => {
   const { id } = useParams();
@@ -151,9 +153,12 @@ const RestaurantPage = () => {
         theme === "dark" && "bg-slate-900 text-white"
       }`}
     >
+      <div className="md:hidden flex justify-start items-center mx">
+        <Link href={'/restaurant'} className="bg-blue-600 px-2 py-1 mx-2 rounded-lg flex"><span><MoveLeft/></span> Back </Link>
+      </div>
       <Header />
       <div
-        className={`max-w-6xl mx-auto px-4 ${
+        className={`max-w-6xl mx-auto mb-10 md:mb-0 px-4 ${
           theme === "dark" && "bg-slate-900 text-white"
         }`}
       >

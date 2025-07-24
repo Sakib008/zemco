@@ -1,4 +1,6 @@
+'use client';
 import { useRestaurant } from "@/context/restaurantContext";
+import { useTheme } from "@/context/themeContext";
 import { CLEAR_FILTER, SET_FILTER } from "@/utils/action";
 import React, { useEffect, useState } from "react";
 
@@ -7,6 +9,7 @@ const FilterItem = () => {
   const [selectedDishes, setSelectedDishes] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
   const {state,dispatch,getAllRestaurant} = useRestaurant();
+  const {theme} = useTheme();
   const products = state.restaurants;
   useEffect(() => {
     getAllRestaurant(); 
@@ -80,7 +83,7 @@ const FilterItem = () => {
   };
 
   return (
-    <div className={`w-56 sticky top-16 flex shadow-xl py-6 rounded-2xl p-4 items-start justify-start flex-col h-[92vh]`}>
+    <div className={`hidden w-56 sticky top-16 md:flex shadow-xl py-6 rounded-2xl p-4 items-start justify-start flex-col h-[92vh] ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
       <div className="text-2xl font-bold my-2 flex justify-between w-full">
         <h1 className="">Filters</h1>
         <button onClick={handleClear} className="text-lg underline underline-offset-2">
