@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="max-w-screen-2xl mx-auto text-center min-h-screen ">
+      <main className="max-w-screen-2xl p-2 mx-auto text-center min-h-screen ">
         <section className="w-full h-80 mb-5 font-bold text-3xl md:text-4xl lg:text-8xl bg-gradient-to-tr from-purple-500 via-pink-600 to-violet-800 flex justify-center items-center rounded-3xl text-white">
           <h1>Best Restaurants of Year 2025</h1>
         </section>
