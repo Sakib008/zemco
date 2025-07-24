@@ -2,7 +2,7 @@
 
 import { useRestaurant } from "@/context/restaurantContext";
 import React, { useEffect, useState } from "react";
-import Header from "@/components/Header";
+import Header from "@/components/Header/Header";
 import Pagination from "@/components/Pagination";
 import RestaurantCard from "@/components/RestaurantCard";
 import Link from "next/link";
@@ -15,9 +15,20 @@ const Restaurant = () => {
   const { theme } = useTheme();
   const { state, getAllRestaurant } = useRestaurant();
   const [showFilter, setShowFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getAllRestaurant();
+    setIsLoading(true);
+    const fetchRestaurants = async () => {
+      try {
+        await getAllRestaurant();
+      } catch (error) {
+        console.error("Failed to fetch restaurants:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchRestaurants();
   }, [state.filter]);
 
   // Pagination of the App
@@ -32,6 +43,14 @@ const Restaurant = () => {
   const onPageChange = (pageNo) => {
     setCurrentPage(pageNo);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div

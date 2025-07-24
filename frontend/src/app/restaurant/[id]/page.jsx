@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import ReviewForm from "../../../components/ReviewForm";
 import ReviewList from "../../../components/ReviewList";
 import { getRestaurantReviews, deleteReview } from "../../../utils/api/review";
-import Header from "../../../components/Header";
+import Header from "../../../components/Header/Header";
 import { singleRestaurant } from "@/utils/api";
 import AddRestaurant from "@/app/profile/components/AddRestaurant";
 import Image from "next/image";

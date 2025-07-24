@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/context/authContext";
-import Header from "@/components/Header";
+import Header from "@/components/Header/Header";
 import AddRestaurant from "./components/AddRestaurant";
 
 const Profile = () => {
