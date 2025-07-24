@@ -159,7 +159,7 @@ const RestaurantPage = () => {
       >
         {/* Restaurant Header */}
         <div
-          className={`bg-white rounded-lg shadow-md p-6 mb-8 ${
+          className={`rounded-lg shadow-lg p-6 mb-8 ${
             theme === "dark" && "bg-slate-900 text-white"
           }`}
         >

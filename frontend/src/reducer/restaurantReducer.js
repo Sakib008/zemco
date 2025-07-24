@@ -3,7 +3,6 @@ import {
   RESTAURANT_UPDATE,
   RESTAURANTS_ALL,
   SET_FILTER,
-  APPLY_FILTER,
   CLEAR_FILTER,
 } from "@/utils/action";
 

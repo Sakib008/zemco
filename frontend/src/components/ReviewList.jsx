@@ -39,7 +39,7 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
       <h3 className="text-xl font-semibold mb-4">Customer Reviews ({reviews.length})</h3>
       
       {reviews.map((review) => (
-        <div key={review._id} className={`bg-white p-4 rounded-lg shadow-sm border ${theme==="dark" && "bg-slate-900 text-white"}`}>
+        <div key={review._id} className={` p-4 rounded-lg shadow-sm border ${theme==="dark" && "bg-slate-900 text-white"}`}>
           <div className="flex justify-between items-start mb-2">
             <div>
               <h4 className="font-semibold ">{review.user}</h4>
@@ -55,7 +55,7 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
             </span>
           </div>
           
-          <p className={`text-gray-700 mt-2 ${theme==='dark' && 'text-gray-200'}`}>{review.comment}</p>
+          <p className={` mt-2 ${theme==='dark' && 'text-gray-200'}`}>{review.comment}</p>
           
           {review.user===`${user.firstname} ${user.lastname}` && onDeleteReview && (
             <button
