@@ -1,7 +1,9 @@
 import { useRestaurant } from "@/context/restaurantContext";
+import { useTheme } from "@/context/themeContext";
 import React, { useState, useRef } from "react";
 
 const AddMenu = ({ open, setOpen, preFilled, onUpdate,restaurantId,menuId }) => {
+  const {theme} = useTheme();
   const [form, setForm] = useState(
     preFilled || { name: "", price: "", description: "", isVeg : true, image: null }
   );
@@ -96,7 +98,7 @@ const AddMenu = ({ open, setOpen, preFilled, onUpdate,restaurantId,menuId }) => 
       onClick={handleClose}
     >
       <div
-        className="bg-white text-left p-6 rounded-2xl shadow-lg min-w-[350px] relative"
+        className={`text-left p-6 rounded-2xl shadow-lg min-w-[350px] relative ${theme === "dark" ? "bg-slate-900 text-white" : "bg-white"}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -117,7 +119,7 @@ const AddMenu = ({ open, setOpen, preFilled, onUpdate,restaurantId,menuId }) => 
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className={`w-full border rounded px-3 py-2 ${theme==="dark" ? "bg-slate-800 text-white" : "bg-white"}`}
               required
             />
           </div>
@@ -129,7 +131,7 @@ const AddMenu = ({ open, setOpen, preFilled, onUpdate,restaurantId,menuId }) => 
                 name="price"
                 value={form.price}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className={`w-full border rounded px-3 py-2 ${theme==="dark" ? "bg-slate-800 text-white" : "bg-white"}`}
                 required
               />
             </div>
@@ -139,7 +141,7 @@ const AddMenu = ({ open, setOpen, preFilled, onUpdate,restaurantId,menuId }) => 
                 name="isVeg"
                 value={form.isVeg}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className={`w-full border rounded px-3 py-2 ${theme==="dark" ? "bg-slate-800 text-white" : "bg-white"}`}
                 required
               >
                 <option value="true">Yes</option>
@@ -154,7 +156,7 @@ const AddMenu = ({ open, setOpen, preFilled, onUpdate,restaurantId,menuId }) => 
               name="description"
               value={form.description}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className={`w-full border rounded px-3 py-2 ${theme==="dark" ? "bg-slate-800 text-white" : "bg-white"}`}
               required
             />
           </div>

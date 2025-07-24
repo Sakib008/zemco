@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRestaurant } from "@/context/restaurantContext";
-import { data } from "autoprefixer";
+import { useTheme } from "@/context/themeContext";
 
 const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
   const [form, setForm] = useState(
     preFilled || { name: "", cuisine: "Indian", address: "", image: null }
   );
   const [imagePreview, setImagePreview] = useState(preFilled?.image || null);
+  const {theme} = useTheme();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { updateRestaurant, createRestaurant } = useRestaurant();
@@ -45,7 +46,7 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
     }
   };
   const handleClose = () => {
-    setForm({ name: "", cuisine: "indian", address: "", image: null });
+    setForm(preFilled || { name: "", cuisine: "indian", address: "", image: null });
     setOpen(false);
   };
 
@@ -115,23 +116,23 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-30 flex text-left items-center justify-center z-50"
+      className={`fixed inset-0 bg-black bg-opacity-30 flex text-left items-center justify-center z-50`}
       onClick={preFilled ? () => setOpen(false) : handleClose}
     >
       <div
-        className="bg-white p-6 rounded-2xl shadow-lg min-w-[350px] relative"
+        className={` p-6 rounded-2xl shadow-lg min-w-[350px] relative ${theme === "dark" ? "bg-slate-900" : "bg-white"}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
-          onClick={preFilled ? () => setOpen(false) : handleClose}
+          onClick={handleClose}
         >
           &times;
         </button>
         <h2 className="text-2xl font-bold mb-4">
           {preFilled ? "Edit Restaurant" : "Add Restaurant"}
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className={`space-y-4`}>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div>
             <label className="block font-semibold">Name</label>
@@ -140,7 +141,7 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className={`w-full border rounded px-3 py-2 ${theme === "dark" ? "bg-slate-800 text-white" : "bg-white"}`}
               required
             />
           </div>
@@ -150,7 +151,7 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
               name="cuisine"
               value={form.cuisine}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className={`w-full border rounded px-3 py-2 ${theme === "dark" ? "bg-slate-800 text-white" : "bg-white"}`}
             >
               {allowedCuisine.map((e) => (
                 <option key={e} value={e}>
@@ -166,7 +167,7 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
               name="address"
               value={form.address}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className={`w-full border rounded px-3 py-2 ${theme === "dark" ? "bg-slate-800 text-white" : "bg-white"}`}
               required
             />
           </div>
@@ -193,8 +194,8 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              className="px-4 py-2 rounded bg-gray-300"
-              onClick={preFilled ? () => setOpen(false) : handleClose}
+              className="px-4 py-2 rounded bg-gray-400"
+              onClick={handleClose}
             >
               Cancel
             </button>
