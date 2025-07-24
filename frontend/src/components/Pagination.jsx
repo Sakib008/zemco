@@ -15,7 +15,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   }
 
   return (
-    <div className={`flex justify-center items-center ${theme==="dark"? "bg-black text-white" : 'bg-white'} gap-2 py-5 w-full  z-10 border-t`}>
+    <div className={`flex justify-center items-center ${theme==="dark"? "bg-gray-800 text-white" : 'bg-white'} gap-2 py-5 w-full  z-10 border-t`}>
       <button
         className="px-3 py-1 rounded border disabled:opacity-50"
         onClick={() => onPageChange(currentPage - 1)}
