@@ -1,3 +1,4 @@
+'use client';
 export const initialThemeState = {
   theme: typeof window !== 'undefined' && localStorage.getItem('theme')
     ? localStorage.getItem('theme')
