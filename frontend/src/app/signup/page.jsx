@@ -97,19 +97,18 @@ const Signup = () => {
 
 
   return (
-    <div className="max-w-screen-xl mx-auto h-[80vh] flex items-center my-20 border-2 rounded-3xl bg-slate-50 border-violet-800 box-border">
-      <div className="w-1/2 h-full rounded-l-3xl relative overflow-hidden">
+    <div className="w-[90vw] md:max-w-screen-xl mx-auto h-[80vh] flex items-center my-20 border-2 rounded-3xl bg-slate-50 border-violet-800 box-border">
+      <div className="hidden md:block w-1/2 h-full rounded-l-3xl relative overflow-hidden">
         <Image
-          className=" object-cover"
-          width={800}
-          height={500}
+          className="object-cover"
+          fill
           src={
             "https://images.unsplash.com/photo-1488324346298-5ad3d8f96d0d?q=80&w=744&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           }
           alt="dining-table"
         />
       </div>
-      <div className="h-full relative w-1/2 flex items-center justify-center text-purple-900">
+      <div className="h-full relative md:w-1/2 mx-auto flex items-center justify-center text-purple-900">
         
         <form
           onSubmit={submitForm}

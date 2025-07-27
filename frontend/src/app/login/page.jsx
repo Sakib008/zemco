@@ -69,19 +69,18 @@ const Login = () => {
     }
   }
   return (
-    <div className="max-w-screen-xl mx-auto h-[80vh] flex items-center my-20 border-2 rounded-3xl bg-slate-50 border-violet-800 box-border">
-      <div className="w-1/2 h-full rounded-l-3xl relative overflow-hidden">
+    <div className="w-[90vw] md:max-w-screen-xl mx-auto h-[80vh] flex items-center my-20 border-2 rounded-3xl bg-slate-50 border-violet-800 box-border">
+      <div className="hidden lg:block w-1/2 h-full rounded-l-3xl relative overflow-hidden">
         <Image
           className=" object-cover"
-          width={800}
-          height={500}
+          fill
           src={
             "https://images.unsplash.com/photo-1488324346298-5ad3d8f96d0d?q=80&w=744&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           }
           alt="dining-table"
         />
       </div>
-      <div className="h-full w-1/2 flex items-center justify-center text-purple-900">
+      <div className="h-full w-[90vw] mx-auto md:w-1/2 flex items-center justify-center text-purple-900">
         <form
           onSubmit={submitForm}
           className="flex flex-col shadow-lg shadow-purple-600 bg-white p-8 rounded-3xl text-2xl"

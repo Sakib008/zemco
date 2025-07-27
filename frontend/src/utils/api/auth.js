@@ -1,6 +1,6 @@
 const {default : axios} = require("axios")
 
-const API_BASE_URL = 'http://localhost:3001/api/auth';
+const API_BASE_URL = 'https://zemco-backend.onrender.com/api/auth';
 
 const login = async (userData)=>{
     try {
