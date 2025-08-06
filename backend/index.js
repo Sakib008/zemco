@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-  origin: "https://zemco.vercel.app/", // Update this if your frontend runs elsewhere
+  origin: ["https://zemco.vercel.app/","http://localhost:3000/"],
   credentials: true
 }));
 
