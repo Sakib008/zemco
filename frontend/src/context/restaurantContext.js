@@ -13,12 +13,29 @@ export const RestaurantProvider = ({ children }) => {
   const [state, dispatch] = useReducer(restaurantReducer, initialState);
   const getAllRestaurant = async () => {
     try {
-      const {data : {restaurants}, status } = await allRestaurant();
-      if (status === 200 || status === 201) {
+      console.log("Calling allRestaurant API...");
+      const response = await allRestaurant();
+      console.log("Full API Response:", response);
+      
+      // Handle different possible response structures
+      let restaurants = [];
+      if (response.data && response.data.restaurants) {
+        restaurants = response.data.restaurants;
+      } else if (response.data && Array.isArray(response.data)) {
+        restaurants = response.data;
+      } else if (Array.isArray(response.data)) {
+        restaurants = response.data;
+      }
+      
+      console.log("Extracted restaurants:", restaurants);
+      console.log("Restaurants count:", restaurants.length);
+      
+      if (response.status === 200 || response.status === 201) {
+        console.log("Dispatching RESTAURANTS_ALL with payload:", restaurants);
         dispatch({ type: RESTAURANTS_ALL, payload: restaurants });
       }
     } catch (error) {
-      console.error(error.message)
+      console.error("Error in getAllRestaurant:", error.message)
       throw error;
     }
   };

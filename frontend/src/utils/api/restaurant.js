@@ -3,7 +3,16 @@
 
 const axios = require("./axiosInstance");
 const allRestaurant = async () => {
-  return await axios.get("/");
+  try {
+    console.log("Making API call to:", axios.defaults.baseURL);
+    const response = await axios.get("/");
+    console.log("API Response:", response);
+    return response;
+  } catch (error) {
+    console.error("Error in API : ", error.message)
+    console.error("API Error:", error.response || error);
+    throw error;
+  }
 };
 const addRestaurant = async (restaurantDetail) => {
   if(restaurantDetail instanceof FormData){

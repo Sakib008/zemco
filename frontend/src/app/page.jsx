@@ -9,11 +9,32 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const { state, getAllRestaurant } = useRestaurant();
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Debug logging
+  console.log("Current state:", state);
+  console.log("Restaurants count:", state.restaurants?.length);
+  
+  // Test API endpoint
+  useEffect(() => {
+    const testAPI = async () => {
+      try {
+        const response = await fetch('https://zemco-backend.onrender.com/api/restaurants');
+        const data = await response.json();
+        console.log("Direct API test response:", data);
+      } catch (error) {
+        console.error("Direct API test error:", error);
+      }
+    };
+    testAPI();
+  }, []);
+  
   useEffect(() => {
     const fetchRestaurants = async () => {
       setIsLoading(true);
       try {
+        console.log("Fetching restaurants...");
         await getAllRestaurant();
+        console.log("Restaurants fetched successfully");
       } catch (error) {
         console.error("Failed to fetch restaurants:", error);
       } finally {
@@ -21,7 +42,8 @@ export default function Home() {
       }
     };
     fetchRestaurants();
-  }, [state.restaursts]);
+  }, []); // Empty dependency array to run only once on mount
+  
   if (isLoading) {
     return <div className="text-center text-2xl font-bold">Loading...</div>;
   }
@@ -43,14 +65,20 @@ export default function Home() {
         </div>
 
         <section className="flex flex-wrap gap-10 justify-center">
-          {state.restaurants
-            .sort((a, b) => b.averageRating - a.averageRating)
-            .slice(0, 5)
-            .map((restaurant) => (
-              <Link href={`restaurant/${restaurant._id}`} key={restaurant._id}>
-                <RestaurantCard restaurant={restaurant} />
-              </Link>
-            ))}
+          {state.restaurants && state.restaurants.length > 0 ? (
+            state.restaurants
+              .sort((a, b) => b.averageRating - a.averageRating)
+              .slice(0, 5)
+              .map((restaurant) => (
+                <Link href={`restaurant/${restaurant._id}`} key={restaurant._id}>
+                  <RestaurantCard restaurant={restaurant} />
+                </Link>
+              ))
+          ) : (
+            <div className="text-center text-xl text-gray-600">
+              No restaurants found. Please check the console for debugging information.
+            </div>
+          )}
         </section>
       </main>
     </>
