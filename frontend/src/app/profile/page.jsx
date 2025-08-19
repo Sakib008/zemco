@@ -5,6 +5,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/context/authContext";
 import Header from "@/components/Header/Header";
 import AddRestaurant from "./components/AddRestaurant";
+import AdminDashboard from "./components/Dashboard/AdminDashboard";
 
 const Profile = () => {
   const { user, logoutUser } = useAuth();
@@ -12,7 +13,7 @@ const Profile = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+     {!user.isAdmin ? <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="max-w-4xl mx-auto p-6">
           <div className="bg-white rounded-3xl shadow-lg p-8">
@@ -83,6 +84,9 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      :
+      <AdminDashboard/>
+      }
     </ProtectedRoute>
   );
 };
