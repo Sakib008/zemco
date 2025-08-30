@@ -19,6 +19,14 @@ const AdminDashboard = () => {
     switch (content) {
       case "allRestaurant":
         return <AdminRestaurents />;
+      case "allReview":
+        return <div>All Reviews</div>;
+      case "famousRestaurant":
+        return <div>Famous Restaurants</div>;
+      case "addRestaurant":
+        return <div>Add Restaurant</div>;
+      case "logout":
+        return <div>Logging out...</div>;
       default:
         return content;
     }
