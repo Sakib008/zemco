@@ -8,7 +8,7 @@ const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
   const {user} = useAuth()
   const {theme} = useTheme()
   const [formData, setFormData] = useState({
-    user: `${user.firstname} ${user.lastname}`,
+    user: `${user?.firstname} ${user?.lastname}`,
     rating: 5,
     comment: ''
   });
