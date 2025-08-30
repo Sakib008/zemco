@@ -7,23 +7,17 @@ import { useRouter } from "next/navigation";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
-        const checkAuth = async () => {
-            setIsLoading(true);
-            try {
-                const res = await getMe();
-                setUser(res.data.user);
-            } catch (err) {
-                setUser(null);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        checkAuth();
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+        setIsLoading(false);
     }, []);
 
     const loginUser = async (userData) => {
@@ -33,6 +27,7 @@ const AuthProvider = ({ children }) => {
                 // After login, fetch user info
                 const meRes = await getMe();
                 setUser(meRes.data.user);
+                localStorage.setItem("user", JSON.stringify(meRes.data.user));
                 router.push("/");
             }
         } catch (error) {
@@ -47,6 +42,7 @@ const AuthProvider = ({ children }) => {
                 // After signup, fetch user info
                 const meRes = await getMe();
                 setUser(meRes.data.user);
+                localStorage.setItem("user", JSON.stringify(meRes.data.user));
                 router.push("/");
             }
         } catch (error) {
@@ -61,6 +57,7 @@ const AuthProvider = ({ children }) => {
             
         } finally {
             setUser(null);
+            localStorage.removeItem("user");
             router.push("/login");
         }
     };
