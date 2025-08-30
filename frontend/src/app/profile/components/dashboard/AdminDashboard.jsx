@@ -12,9 +12,9 @@ import React, { useState } from "react";
 import AdminRestaurents from "./AdminRestaurents";
 
 const AdminDashboard = () => {
+
   const [content, setContent] = useState("allRestaurant");
   const [isExpanded, setIsExpanded] = useState(false);
-
   const renderContent = () => {
     switch (content) {
       case "allRestaurant":
@@ -62,9 +62,8 @@ const AdminDashboard = () => {
 
             <div className="mt-14">
               {menuItems.map((item) => (
-                <div className="flex items-center">
+                <div className="flex items-center" key={item.id}>
                   <button
-                    key={item.id}
                     onClick={() => setContent(item.id)}
                     className={`m-2 p-2 rounded-lg transition-colors gap-2 ${
                       content === item.id ? "bg-purple-600" : "bg-purple-400"
