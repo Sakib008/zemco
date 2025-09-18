@@ -32,16 +32,15 @@ const createUser = async (req, res) => {
     });
     await newUser.save();
     const isAdmin = newUser.isAdmin;
+    res.status(201).json({
+      message: "User Created Successfully, Now Login",
+      user: newUser,
+    });
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 15 * 24 * 60 * 60 * 1000,
-    });
-    res.status(201).json({
-      message: "User Created Successfully, Now Login",
-      user: newUser,
-      token,
     });
   } catch (error) {
     if (error.name === "ValidationError") {
@@ -75,17 +74,16 @@ const logUser = async (req, res) => {
     const token = jwt.sign({ id: existUser._id, username }, jwtSecret, {
       expiresIn: "15d",
     });
+    
+    res.status(200).json({
+      message: "User Fetched Successfully",
+      user: existUser,
+    });
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 15 * 24 * 60 * 60 * 1000,
-    });
-
-    res.status(200).json({
-      message: "User Fetched Successfully",
-      user: existUser,
-      token,
     });
   } catch (error) {
     console.error("Error : ", error.message);
