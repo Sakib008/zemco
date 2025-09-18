@@ -7,7 +7,6 @@ const RestaurantRouter = require("./routes/restaurant.router");
 const AuthRouter = require("./routes/auth.router");
 const ReviewRouter = require("./routes/review.router");
 const ImageRouter = require("./routes/imageUpload.router");
-const { get } = require("mongoose");
 
 const app = express();
 app.use(express.json());
@@ -15,7 +14,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://zemco.vercel.app"],
+    origin: ["http://localhost:3000","http://localhost:3001", "https://zemco.vercel.app"],
     credentials: true,
   })
 );
