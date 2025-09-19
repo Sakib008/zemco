@@ -34,7 +34,6 @@ const filterRestaurants = (restaurants, filter) => {
 };
 
 const restaurantReducer = (state, action) => {
-  console.log("Reducer called with action:", action.type, action.payload);
   switch (action.type) {
     case RESTAURANTS_ALL:
       console.log("Processing RESTAURANTS_ALL, payload length:", action.payload?.length);
