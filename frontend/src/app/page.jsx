@@ -8,26 +8,8 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const { state, getAllRestaurant } = useRestaurant();
-  const [isLoading, setIsLoading] = useState(false);
-  
-  // Debug logging
-  console.log("Current state:", state);
-  console.log("Restaurants count:", state.restaurants?.length);
-  
-  // Test API endpoint
-  useEffect(() => {
-    const testAPI = async () => {
-      try {
-        const response = await fetch('https://zemco-backend.onrender.com/api/restaurants');
-        const data = await response.json();
-        console.log("Direct API test response:", data);
-      } catch (error) {
-        console.error("Direct API test error:", error);
-      }
-    };
-    testAPI();
-  }, []);
-  
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchRestaurants = async () => {
       setIsLoading(true);
@@ -42,10 +24,14 @@ export default function Home() {
       }
     };
     fetchRestaurants();
-  }, []); // Empty dependency array to run only once on mount
-  
+  }, []);
+
   if (isLoading) {
-    return <div className="text-center text-2xl font-bold">Loading...</div>;
+    return (
+      <div className="text-center h-screen w-screen flex justify-center items-center text-2xl font-bold">
+        <div className="size-20 rounded-full bg-transparent border-4 border-r-0 border-r-transparent border-purple-800 animate-spin"></div>
+      </div>
+    );
   }
   return (
     <>
@@ -70,13 +56,17 @@ export default function Home() {
               .sort((a, b) => b.averageRating - a.averageRating)
               .slice(0, 5)
               .map((restaurant) => (
-                <Link href={`restaurant/${restaurant._id}`} key={restaurant._id}>
+                <Link
+                  href={`restaurant/${restaurant._id}`}
+                  key={restaurant._id}
+                >
                   <RestaurantCard restaurant={restaurant} />
                 </Link>
               ))
           ) : (
             <div className="text-center text-xl text-gray-600">
-              No restaurants found. Please check the console for debugging information.
+              No restaurants found. Please check the console for debugging
+              information.
             </div>
           )}
         </section>
