@@ -1,20 +1,13 @@
-const API_BASE_URL = 'https://zemco-backend.onrender.com/api';
+const axios = require('./axiosInstance');
 
 // Create a new review
 export const createReview = async (reviewData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/reviews`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(reviewData),
-    });
-    if (!response.ok) {
+    const response = await axios.post(`/reviews`, reviewData);
+    if (response.status !== 201 || response.status !== 200) {
       throw new Error('Failed to create review');
     }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error('Error creating review:', error);
     throw error;
@@ -24,15 +17,15 @@ export const createReview = async (reviewData) => {
 // Get all reviews for a restaurant
 export const getRestaurantReviews = async (restaurantId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/reviews/restaurant/${restaurantId}`);
+    const response = await axios.get(`/reviews/restaurant/${restaurantId}`);
     
-    if (!response.ok) {
+    if (response.status !== 200 || response.status !== 201) {
       throw new Error('Failed to fetch reviews');
     }
 
-    return await response.json();
+    return response.data;
   } catch (error) {
-    console.error('Error fetching reviews:', error);
+    console.error('Error fetching reviews:', error || error.message);
     throw error;
   }
 };
@@ -40,17 +33,15 @@ export const getRestaurantReviews = async (restaurantId) => {
 // Delete a review
 export const deleteReview = async (reviewId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/reviews/${reviewId}`, {
-      method: 'DELETE',
-    });
+    const response = await axios.delete(`/reviews/${reviewId}`);
 
-    if (!response.ok) {
+    if (response.status !== 200 || response.status !== 201) {
       throw new Error('Failed to delete review');
     }
 
-    return await response.json();
+    return response.data;
   } catch (error) {
-    console.error('Error deleting review:', error);
+    console.error('Error deleting review:', error || error.message);
     throw error;
   }
 };
