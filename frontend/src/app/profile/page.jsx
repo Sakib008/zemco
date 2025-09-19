@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/context/authContext";
 import Header from "@/components/Header/Header";
 import AddRestaurant from "./components/AddRestaurant";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
+import { getMe } from "@/utils/api/auth";
 
 const Profile = () => {
   const { user, logoutUser } = useAuth();
