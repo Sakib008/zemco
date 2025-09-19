@@ -43,7 +43,7 @@ const Dish = ({ dish, open, setOpen ,restaurantId }) => {
             <div className="flex justify-end space-x-2">
 
             <button
-              onClick={() => setOpen(false)}
+              onClick={() => setOpen(null)}
               className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
               >
               Close
