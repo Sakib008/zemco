@@ -57,7 +57,7 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
           
           <p className={` mt-2 ${theme==='dark' && 'text-gray-200'}`}>{review.comment}</p>
           
-          {review.user===`${user.firstname} ${user.lastname}` && onDeleteReview && (
+          {review.user===`${user?.firstname} ${user?.lastname}` && onDeleteReview && (
             <button
               onClick={() => onDeleteReview(review._id)}
               className="mt-2 text-red-500 text-sm hover:text-red-700"
