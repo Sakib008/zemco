@@ -25,7 +25,7 @@ const RestaurantPage = () => {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const { theme } = useTheme();
-  const [openDish, setOpenDish] = useState(false);
+  const [openDishId, setOpenDishId] = useState(null);
 
   // Fetch restaurant details and reviews
   const fetchRestaurantData = async () => {
@@ -235,9 +235,9 @@ const RestaurantPage = () => {
               <h3 className="text-xl font-semibold mb-4">Menu</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {restaurant.menu.map((dish, index) => (
-                  <div key={index} onClick={() => setOpenDish(true)} className="cursor-pointer">
+                  <div key={index} onClick={() => setOpenDishId(restaurant._id)} className="cursor-pointer">
 
-                    <Dish dish={dish} open={openDish} setOpen={setOpenDish} restaurantId={restaurant._id} />
+                    <Dish dish={dish} open={openDishId} setOpen={setOpenDishId} restaurantId={restaurant._id} />
                   </div>
                 ))}
               </div>
