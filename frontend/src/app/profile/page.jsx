@@ -5,7 +5,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/context/authContext";
 import Header from "@/components/Header/Header";
 import AddRestaurant from "./components/AddRestaurant";
-import AdminDashboard from "./components/Dashboard/AdminDashboard";
+import AdminDashboard from "../../app/profile/components/dashboard/AdminDashboard";
 import { getMe } from "@/utils/api/auth";
 
 const Profile = () => {
