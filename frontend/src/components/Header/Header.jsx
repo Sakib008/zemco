@@ -40,14 +40,12 @@ const Header = () => {
             {theme === "dark" ? "🌙" : "☀️"}
           </button>
           {isAuthenticated ? (
-            <>
-              <Link
-                href={"/profile"}
-                className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center"
-              >
-                {user?.username ? user.username.charAt(0).toUpperCase() : "U"}
-              </Link>
-            </>
+            <Link
+              href={"/profile"}
+              className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center"
+            >
+              {user?.username ? user.username.charAt(0).toUpperCase() : "U"}
+            </Link>
           ) : (
             <Link
               href={"/login"}
@@ -78,12 +76,12 @@ const Header = () => {
         >
           <HandPlatter className="text-white w-8 h-8" />
         </Link>
-      <Link
-                href={"/profile"}
-                className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center"
-              >
-                {user?.username ? user.username.charAt(0).toUpperCase() : "U"}
-              </Link>
+        <Link
+          href={"/profile"}
+          className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center"
+        >
+          {user?.username ? user.username.charAt(0).toUpperCase() : "U"}
+        </Link>
       </header>
     </>
   );
