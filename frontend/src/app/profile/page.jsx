@@ -12,9 +12,13 @@ const Profile = () => {
   const { user, logoutUser } = useAuth();
   const [openRestaurant, setOpenRestaurant] = useState(false);
 
+
   return (
     <ProtectedRoute>
-     {!user.isAdmin ? <div className="min-h-screen bg-gray-50">
+      {user && !user.username && <div className="min-h-screen flex justify-center items-center bg-gray-50">
+        <h2 className="text-3xl font-bold text-neutral-800">You need to login to view this page</h2>
+      </div>}
+     {user && !user.isAdmin ? <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="max-w-4xl mx-auto p-6">
           <div className="bg-white rounded-3xl shadow-lg p-8">
