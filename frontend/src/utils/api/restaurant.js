@@ -7,7 +7,6 @@ const allRestaurant = async () => {
     const response = await axios.get("/restaurants");
     return response;
   } catch (error) {
-    console.error("API Error:", error.response.message || error.message || error);
     throw error;
   }
 };

@@ -1,10 +1,16 @@
-'use client'
+"use client";
 import restaurantReducer, { initialState } from "@/reducer/restaurantReducer";
+import { RESTAURANT_ADD, RESTAURANTS_ALL } from "@/utils/action";
 import {
-  RESTAURANT_ADD,
-  RESTAURANTS_ALL,
-} from "@/utils/action";
-import { addMenuToRestaurant, addRestaurant, allRestaurant, deleteMenuItem, editMenuItem, editRestaurant, removeRestaurant, singleRestaurant } from "@/utils/api";
+  addMenuToRestaurant,
+  addRestaurant,
+  allRestaurant,
+  deleteMenuItem,
+  editMenuItem,
+  editRestaurant,
+  removeRestaurant,
+  singleRestaurant,
+} from "@/utils/api";
 import { createContext, useContext, useReducer, useState } from "react";
 
 export const RestaurantContext = createContext();
@@ -13,29 +19,15 @@ export const RestaurantProvider = ({ children }) => {
   const [state, dispatch] = useReducer(restaurantReducer, initialState);
   const getAllRestaurant = async () => {
     try {
-      console.log("Calling allRestaurant API...");
-      const response = await allRestaurant();
-      console.log("Full API Response:", response);
-      
-      // Handle different possible response structures
-      let restaurants = [];
-      if (response.data && response.data.restaurants) {
-        restaurants = response.data.restaurants;
-      } else if (response.data && Array.isArray(response.data)) {
-        restaurants = response.data;
-      } else if (Array.isArray(response.data)) {
-        restaurants = response.data;
-      }
-      
-      console.log("Extracted restaurants:", restaurants);
-      console.log("Restaurants count:", restaurants.length);
-      
-      if (response.status === 200 || response.status === 201) {
-        console.log("Dispatching RESTAURANTS_ALL with payload:", restaurants);
+      const {
+        data: { restaurants },
+        status,
+      } = await allRestaurant();
+
+      if (status === 200 || status === 201) {
         dispatch({ type: RESTAURANTS_ALL, payload: restaurants });
       }
     } catch (error) {
-      console.error("Error in getAllRestaurant:", error.message)
       throw error;
     }
   };
@@ -52,18 +44,20 @@ export const RestaurantProvider = ({ children }) => {
       throw error;
     }
   };
-  const createRestaurant = async(restaurantData)=>{
+  const createRestaurant = async (restaurantData) => {
     try {
-     
-      const {data : {restaurant},status} = await addRestaurant(restaurantData);
-      if(status===200|| status===201){
-        dispatch({type : RESTAURANT_ADD,payload : restaurant})
-      } 
+      const {
+        data: { restaurant },
+        status,
+      } = await addRestaurant(restaurantData);
+      if (status === 200 || status === 201) {
+        dispatch({ type: RESTAURANT_ADD, payload: restaurant });
+      }
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error(error);
+      throw error;
     }
-  }
+  };
   const deleteRestaurant = async (restaurantId) => {
     try {
       const res = await removeRestaurant(restaurantId, { isDeleted: true });
@@ -87,8 +81,8 @@ export const RestaurantProvider = ({ children }) => {
     } catch (error) {
       console.error(error.message);
       throw error;
-    } 
-  }
+    }
+  };
   const editMenu = async (restaurantId, menuId, menuData) => {
     try {
       const res = await editMenuItem(restaurantId, menuId, menuData);
@@ -116,9 +110,6 @@ export const RestaurantProvider = ({ children }) => {
     }
   };
 
-
-
-
   return (
     <RestaurantContext.Provider
       value={{
@@ -127,8 +118,10 @@ export const RestaurantProvider = ({ children }) => {
         getAllRestaurant,
         updateRestaurant,
         createRestaurant,
-        editMenu,createMenu,
-        deleteMenu,deleteRestaurant
+        editMenu,
+        createMenu,
+        deleteMenu,
+        deleteRestaurant,
       }}
     >
       {children}
@@ -136,4 +129,4 @@ export const RestaurantProvider = ({ children }) => {
   );
 };
 
-export const useRestaurant = ()=> useContext(RestaurantContext)
+export const useRestaurant = () => useContext(RestaurantContext);

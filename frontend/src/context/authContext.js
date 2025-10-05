@@ -24,9 +24,7 @@ const AuthProvider = ({ children }) => {
         try {
             const res = await login(userData);
             if (res.status === 200 || res.status === 201) {
-                // After login, fetch user info
                 const meRes = await getMe();
-                setUser(meRes.data.user);
                 localStorage.setItem("user", JSON.stringify(meRes.data.user));
                 router.push("/");
             }
@@ -39,9 +37,7 @@ const AuthProvider = ({ children }) => {
         try {
             const res = await signUp(userData);
             if (res.status === 200 || res.status === 201) {
-                // After signup, fetch user info
                 const meRes = await getMe();
-                setUser(meRes.data.user);
                 localStorage.setItem("user", JSON.stringify(meRes.data.user));
                 router.push("/");
             }
