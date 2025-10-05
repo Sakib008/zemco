@@ -63,19 +63,16 @@ const RestaurantPage = () => {
   }, [restaurantId]);
 
   const handleReviewSubmitted = () => {
-    // Refresh both restaurant data and reviews after a new review is submitted
     fetchRestaurantData();
   };
 
   const handleDeleteReview = async (reviewId) => {
     try {
       await deleteReview(reviewId);
-      // Remove the deleted review from state
       setReviews((prevReviews) =>
         prevReviews.filter((review) => review._id !== reviewId)
       );
 
-      // Also refresh restaurant data to update average rating
       fetchRestaurantData();
     } catch (error) {
       console.error("Error deleting review:", error);
