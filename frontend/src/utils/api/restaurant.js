@@ -4,13 +4,10 @@
 const axios = require("./axiosInstance");
 const allRestaurant = async () => {
   try {
-    console.log("Making API call to:", axios.defaults.baseURL);
     const response = await axios.get("/restaurants");
-    console.log("API Response:", response);
     return response;
   } catch (error) {
-    console.error("Error in API : ", error.message)
-    console.error("API Error:", error.response || error);
+    console.error("API Error:", error.response.message || error.message || error);
     throw error;
   }
 };
