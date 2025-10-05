@@ -36,14 +36,12 @@ const ReviewForm = ({ restaurantId, onReviewSubmitted }) => {
 
       await createReview(reviewData);
       
-      // Reset form
       setFormData({
         user: `${user.firstname} ${user.lastname}`,
         rating: 5,
         comment: ''
       });
 
-      // Notify parent component to refresh reviews
       if (onReviewSubmitted) {
         onReviewSubmitted();
       }
