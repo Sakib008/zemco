@@ -7,9 +7,8 @@ import { useTheme } from "@/context/themeContext";
 import SearchRestaurant from "./components/searchRestaurant";
 
 const Header = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
-
   return (
     <>
       <header
@@ -39,7 +38,9 @@ const Header = () => {
           >
             {theme === "dark" ? "🌙" : "☀️"}
           </button>
-          {isAuthenticated ? (
+          {isLoading ? (
+            <div className="bg-gray-400 w-12 h-12 rounded-full animate-pulse" />
+          ) : isAuthenticated ? (
             <Link
               href={"/profile"}
               className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center"
@@ -76,12 +77,16 @@ const Header = () => {
         >
           <HandPlatter className="text-white w-8 h-8" />
         </Link>
-        <Link
-          href={"/profile"}
-          className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center"
-        >
-          {user?.username ? user.username.charAt(0).toUpperCase() : "U"}
-        </Link>
+        {isLoading ? (
+          <div className="bg-gray-400 w-12 h-12 rounded-full animate-pulse" />
+        ) : (
+          <Link
+            href={isAuthenticated ? "/profile" : "/login"}
+            className="bg-violet-800 w-12 h-12 font-bold text-2xl text-white border-2 border-gray-600 rounded-full flex items-center justify-center"
+          >
+            {isAuthenticated && user?.username ? user.username.charAt(0).toUpperCase() : "U"}
+          </Link>
+        )}
       </header>
     </>
   );
