@@ -2,14 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRestaurant } from "@/context/restaurantContext";
 import { useTheme } from "@/context/themeContext";
 
-const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
+const AddRestaurant = ({ preFilled, onUpdate, isInline = false }) => {
   const [form, setForm] = useState(
     preFilled || { name: "", cuisine: "Indian", address: "", image: null }
   );
   const [imagePreview, setImagePreview] = useState(preFilled?.image || null);
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const { updateRestaurant, createRestaurant } = useRestaurant();
   const allowedCuisine = [
     "Indian",
@@ -45,14 +46,21 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
       reader.readAsDataURL(file);
     }
   };
-  const handleClose = () => {
-    setForm(preFilled || { name: "", cuisine: "indian", address: "", image: null });
-    setOpen(false);
+
+  const handleReset = () => {
+    setForm({ name: "", cuisine: "Indian", address: "", image: null });
+    setImagePreview(null);
+    setError("");
+    setSuccess("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
     try {
       let dataToSend;
@@ -66,73 +74,188 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
       } else {
         dataToSend = { ...form };
       }
-      console.log("Submitting:", dataToSend);
-      console.log("form data to submit : ", form);
-      if (!dataToSend.name || !dataToSend.address) {
+
+      if (!form.name || !form.address) {
         setError("Name and Address are required.");
         return;
       }
-      if (dataToSend.name.length < 3) {
+      if (form.name.length < 3) {
         setError("Restaurant name must be at least 3 characters long.");
         return;
-      } 
-      if (dataToSend.address.length < 5) {
-        setError("Address must be at least 5 characters long.");  
+      }
+      if (form.address.length < 5) {
+        setError("Address must be at least 5 characters long.");
         return;
       }
-      if (dataToSend.cuisine && !allowedCuisine.includes(dataToSend.cuisine)) {
+      if (form.cuisine && !allowedCuisine.includes(form.cuisine)) {
         setError("Invalid cuisine selected.");
         return;
       }
 
       if (preFilled && preFilled._id) {
         await updateRestaurant(preFilled._id, dataToSend);
-        if (onUpdate) {
-          onUpdate();
-        }
+        setSuccess("Restaurant updated successfully!");
       } else {
         await createRestaurant(dataToSend);
-        if (onUpdate) {
-          onUpdate();
-        }
+        setSuccess("Restaurant added successfully!");
       }
-      setOpen(false);
-      setForm({ name: "", cuisine: "Indian", address: "", image: null });
-      setImagePreview(null);
+
+      if (onUpdate) {
+        onUpdate();
+      }
+
+      // Reset form after successful submission (only for inline mode)
+      if (isInline) {
+        handleReset();
+      }
     } catch (err) {
       console.error("Submit error:", err);
-      console.log("Error Message : ", err.response || err.message);
       setError(
         err?.response?.data?.message ||
           err.message ||
-          "Failed to update restaurant. Please try again."
+          "Failed to save restaurant. Please try again."
       );
     } finally {
       setLoading(false);
     }
   };
 
-  if (!open) return null;
+  // Inline version (for dashboard)
+  if (isInline) {
+    return (
+      <div className="w-full max-w-2xl mx-auto">
+        <div
+          className={`p-6 rounded-2xl shadow-lg ${
+            theme === "dark" ? "bg-slate-900" : "bg-white"
+          }`}
+        >
+          <h2 className="text-2xl font-bold mb-6">
+            {preFilled ? "Edit Restaurant" : "Add New Restaurant"}
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                {success}
+              </div>
+            )}
+            <div>
+              <label className="block font-semibold mb-2">Name *</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                className={`w-full border rounded px-3 py-2 ${
+                  theme === "dark" ? "bg-slate-800 text-white" : "bg-white"
+                }`}
+                required
+              />
+            </div>
+            <div>
+              <label className="block font-semibold mb-2">Cuisine *</label>
+              <select
+                name="cuisine"
+                value={form.cuisine}
+                onChange={handleChange}
+                className={`w-full border rounded px-3 py-2 ${
+                  theme === "dark" ? "bg-slate-800 text-white" : "bg-white"
+                }`}
+              >
+                {allowedCuisine.map((e) => (
+                  <option key={e} value={e}>
+                    {e}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block font-semibold mb-2">Address *</label>
+              <input
+                type="text"
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                className={`w-full border rounded px-3 py-2 ${
+                  theme === "dark" ? "bg-slate-800 text-white" : "bg-white"
+                }`}
+                required
+              />
+            </div>
+            <div>
+              <label className="block font-semibold mb-2">Image</label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
+                ref={fileInputRef}
+                className="w-full"
+              />
+              {imagePreview && (
+                <div className="mt-2">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded"
+                  />
+                </div>
+              )}
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <button
+                type="button"
+                className="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500"
+                onClick={handleReset}
+              >
+                Reset
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
+                disabled={loading}
+              >
+                {loading
+                  ? preFilled
+                    ? "Updating..."
+                    : "Adding..."
+                  : preFilled
+                  ? "Update Restaurant"
+                  : "Add Restaurant"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
+  // Modal version (original functionality)
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-30 flex text-left items-center justify-center z-50`}
-      onClick={preFilled ? () => setOpen(false) : handleClose}
+      className="fixed inset-0 bg-black bg-opacity-30 flex text-left items-center justify-center z-50"
+      onClick={handleReset}
     >
       <div
-        className={` p-6 rounded-2xl shadow-lg min-w-[350px] relative ${theme === "dark" ? "bg-slate-900" : "bg-white"}`}
+        className={`p-6 rounded-2xl shadow-lg min-w-[350px] relative ${
+          theme === "dark" ? "bg-slate-900" : "bg-white"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
-          onClick={handleClose}
+          className="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-2xl"
+          onClick={handleReset}
         >
           &times;
         </button>
         <h2 className="text-2xl font-bold mb-4">
           {preFilled ? "Edit Restaurant" : "Add Restaurant"}
         </h2>
-        <form onSubmit={handleSubmit} className={`space-y-4`}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div>
             <label className="block font-semibold">Name</label>
@@ -141,7 +264,9 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
               name="name"
               value={form.name}
               onChange={handleChange}
-              className={`w-full border rounded px-3 py-2 ${theme === "dark" ? "bg-slate-800 text-white" : "bg-white"}`}
+              className={`w-full border rounded px-3 py-2 ${
+                theme === "dark" ? "bg-slate-800 text-white" : "bg-white"
+              }`}
               required
             />
           </div>
@@ -151,7 +276,9 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
               name="cuisine"
               value={form.cuisine}
               onChange={handleChange}
-              className={`w-full border rounded px-3 py-2 ${theme === "dark" ? "bg-slate-800 text-white" : "bg-white"}`}
+              className={`w-full border rounded px-3 py-2 ${
+                theme === "dark" ? "bg-slate-800 text-white" : "bg-white"
+              }`}
             >
               {allowedCuisine.map((e) => (
                 <option key={e} value={e}>
@@ -167,7 +294,9 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
               name="address"
               value={form.address}
               onChange={handleChange}
-              className={`w-full border rounded px-3 py-2 ${theme === "dark" ? "bg-slate-800 text-white" : "bg-white"}`}
+              className={`w-full border rounded px-3 py-2 ${
+                theme === "dark" ? "bg-slate-800 text-white" : "bg-white"
+              }`}
               required
             />
           </div>
@@ -195,7 +324,7 @@ const AddRestaurant = ({ open, setOpen, preFilled, onUpdate }) => {
             <button
               type="button"
               className="px-4 py-2 rounded bg-gray-400"
-              onClick={handleClose}
+              onClick={handleReset}
             >
               Cancel
             </button>

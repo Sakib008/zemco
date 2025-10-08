@@ -23,7 +23,7 @@ const AdminDashboard = () => {
       case "allRestaurant":
         return <AdminRestaurents />;
       case "addRestaurant":
-        return <AddRestaurant open={open} setOpen={setOpen} />;``
+        return <AddRestaurant isInline={true} />;
       case "profile":
         return <div>
           <ProfilePage user={user} logoutUser={logoutUser} isLogout={true} />
