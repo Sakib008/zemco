@@ -1,15 +1,15 @@
 "use client";
 
-import { useRestaurant } from "@/context/restaurantContext";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { Filter } from "lucide-react";
+
+import { useRestaurant } from "@/context/restaurantContext";
 import Header from "@/components/Header/Header";
 import Pagination from "@/components/Pagination";
 import RestaurantCard from "@/components/RestaurantCard";
-import Link from "next/link";
 import { useTheme } from "@/context/themeContext";
 import FilterItem from "./components/filter";
-import { Filter } from "lucide-react";
-
 
 const Restaurant = () => {
   const { theme } = useTheme();
@@ -21,7 +21,9 @@ const Restaurant = () => {
     setIsLoading(true);
     const fetchRestaurants = async () => {
       try {
-        await getAllRestaurant();
+        if (state.restaurants.length === 0) {
+          await getAllRestaurant();
+        }
       } catch (error) {
         console.error("Failed to fetch restaurants:", error);
       } finally {
@@ -61,11 +63,15 @@ const Restaurant = () => {
       <Header />
       <section className="relative max-w-screen-2xl flex mx-auto">
         <button
-  className={`md:hidden fixed top-4 left-4 z-50 p-2 rounded-full shadow ${theme === 'dark' ? 'bg-gray-800 border-2 border-white text-white' : 'bg-white text-black'}`}
-  onClick={() => setShowFilter(true)}
->
-  <Filter/>
-</button>
+          className={`md:hidden fixed top-4 left-4 z-50 p-2 rounded-full shadow ${
+            theme === "dark"
+              ? "bg-gray-800 border-2 border-white text-white"
+              : "bg-white text-black"
+          }`}
+          onClick={() => setShowFilter(true)}
+        >
+          <Filter />
+        </button>
 
         <aside className="hidden md:block">
           <FilterItem />
@@ -83,13 +89,14 @@ const Restaurant = () => {
             </div>
           </div>
         )}
-        <main className=" flex flex-wrap gap-4 justify-center p-6">
-          {restaurantOnPage.map((restaurant) => (
-            <Link href={`restaurant/${restaurant._id}`} key={restaurant._id}>
-              <RestaurantCard restaurant={restaurant} />
-            </Link>
-          ))}
-
+        <main className="  md:min-w-[65vw] ">
+          <div className="min-h-[80vh] flex gap-4 justify-center p-6 flex-wrap">
+            {restaurantOnPage.map((restaurant) => (
+              <Link href={`restaurant/${restaurant._id}`} key={restaurant._id}>
+                <RestaurantCard restaurant={restaurant} />
+              </Link>
+            ))}
+          </div>
           <Pagination
             currentPage={currentPage}
             totalPages={totalpage}

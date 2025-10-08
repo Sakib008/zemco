@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
@@ -15,7 +14,11 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (error) {
+                localStorage.removeItem("user");
+            }
         }
         setIsLoading(false);
     }, []);
@@ -25,7 +28,9 @@ const AuthProvider = ({ children }) => {
             const res = await login(userData);
             if (res.status === 200 || res.status === 201) {
                 const meRes = await getMe();
-                localStorage.setItem("user", JSON.stringify(meRes.data.user));
+                const newUser = meRes.data.user;
+                setUser(newUser);
+                localStorage.setItem("user", JSON.stringify(newUser));
                 router.push("/");
             }
         } catch (error) {
@@ -38,7 +43,9 @@ const AuthProvider = ({ children }) => {
             const res = await signUp(userData);
             if (res.status === 200 || res.status === 201) {
                 const meRes = await getMe();
-                localStorage.setItem("user", JSON.stringify(meRes.data.user));
+                const newUser = meRes.data.user;
+                setUser(newUser);
+                localStorage.setItem("user", JSON.stringify(newUser));
                 router.push("/");
             }
         } catch (error) {

@@ -36,7 +36,6 @@ const filterRestaurants = (restaurants, filter) => {
 const restaurantReducer = (state, action) => {
   switch (action.type) {
     case RESTAURANTS_ALL:
-      console.log("Processing RESTAURANTS_ALL, payload length:", action.payload?.length);
       return {
         ...state,
         restaurants: action.payload,
@@ -65,7 +64,7 @@ const restaurantReducer = (state, action) => {
     case CLEAR_FILTER:
       return {
         ...state,
-        filter: { cuisines: [], dishes: [], rating: null },
+        filter: { cuisines: [], dishes: [], rating: "" },
       };
     default:
       return state;
