@@ -12,6 +12,7 @@ import AdminRestaurents from "./AdminRestaurents";
 import { useAuth } from "@/context/authContext";
 import ProfilePage from "../ProfilePage";
 import AddRestaurant from "../AddRestaurant";
+import LogoutPromise from "./components/LogoutPromise";
 
 const AdminDashboard = () => {
   const [content, setContent] = useState("allRestaurant");
@@ -28,13 +29,13 @@ const AdminDashboard = () => {
         return <div>
           <ProfilePage user={user} logoutUser={logoutUser} isLogout={true} />
         </div>;
-      case "logout":
-        return <div>Logging out...</div>;
       default:
         return content;
     }
   };
-
+  const handleLogout = () => {
+    setOpen(true);
+  };
   const menuItems = [
     { id: "allRestaurant", icon: ClipboardList, label: "All Restaurants" },
     { id: "addRestaurant", icon: CirclePlus, label: "Add Restaurant" },
@@ -99,7 +100,7 @@ const AdminDashboard = () => {
             </div>
             <div className="flex items-center">
               <button
-                onClick={() => setContent("logout")}
+                onClick={() => handleLogout()}
                 className={`m-2 p-2 w-full flex mb-4 rounded-lg transition-colors gap-2 bg-red-600`}
               >
                 <LogOut className="text-yellow-300" />
@@ -113,6 +114,7 @@ const AdminDashboard = () => {
 
         <div className="bg-blue-300 w-full rounded-e-2xl overflow-y-scroll p-4">
           {renderContent()}
+          <LogoutPromise open={open} setOpen={setOpen} />
         </div>
       </div>
     </div>
