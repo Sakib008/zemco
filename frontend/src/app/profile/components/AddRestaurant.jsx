@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRestaurant } from "@/context/restaurantContext";
 import { useTheme } from "@/context/themeContext";
 
-const AddRestaurant = ({ preFilled, onUpdate, isInline = false }) => {
+const AddRestaurant = ({open,setOpen, preFilled, onUpdate, isInline = false }) => {
   const [form, setForm] = useState(
     preFilled || { name: "", cuisine: "Indian", address: "", image: null }
   );
@@ -55,6 +55,7 @@ const AddRestaurant = ({ preFilled, onUpdate, isInline = false }) => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    setOpen(false);
   };
 
   const handleSubmit = async (e) => {
@@ -233,7 +234,8 @@ const AddRestaurant = ({ preFilled, onUpdate, isInline = false }) => {
       </div>
     );
   }
-
+  console.log("Add Restaurant", open);
+  if(!open) return null;
   // Modal version (original functionality)
   return (
     <div

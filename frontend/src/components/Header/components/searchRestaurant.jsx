@@ -3,22 +3,27 @@ import { useRestaurant } from "@/context/restaurantContext";
 import { useTheme } from "@/context/themeContext";
 import { Search, Star, X } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SearchRestaurant = () => {
   const desktopSearchRef = useRef();
   const mobileSearchRef = useRef();
   const { theme } = useTheme();
-  const { state } = useRestaurant();
+  const { state, getAllRestaurant } = useRestaurant();
   const [searchValue, setSearchValue] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
+  useEffect(() => {
+    if (state.restaurants.length === 0) {
+      getAllRestaurant();
+    }
+  }, []);
   const handleSearch = () => {
     setIsSearching(true);
     // Focus the appropriate input based on screen size
     setTimeout(() => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth > 769) {
         desktopSearchRef.current?.focus();
       } else {
         mobileSearchRef.current?.focus();
@@ -29,7 +34,7 @@ const SearchRestaurant = () => {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
-    
+
     // Automatically show search results when user starts typing
     if (!isSearching) {
       setIsSearching(true);
@@ -111,16 +116,14 @@ const SearchRestaurant = () => {
                 >
                   <li
                     className={`py-2 px-4 rounded cursor-pointer transition-colors ${
-                      theme === "dark" 
-                        ? "hover:bg-gray-700" 
+                      theme === "dark"
+                        ? "hover:bg-gray-700"
                         : "hover:bg-gray-200"
                     }`}
                   >
                     <h3 className="font-semibold">{restaurant.name}</h3>
                     <div className="flex justify-between text-sm">
-                      <p className="text-gray-500">
-                        {restaurant.cuisine}
-                      </p>
+                      <p className="text-gray-500">{restaurant.cuisine}</p>
                       <p className="flex items-center gap-1 text-gray-500">
                         <Star size={15} fill="yellow" stroke="orange" />
                         {Number(restaurant.averageRating).toFixed(1)}
@@ -162,8 +165,8 @@ const SearchRestaurant = () => {
                 name="search"
                 placeholder="Search..."
                 className={`rounded-2xl border-2 border-neutral-800 outline-none text-lg w-full py-2 px-4 pr-10 ${
-                  theme === "dark" 
-                    ? "bg-gray-800 text-white" 
+                  theme === "dark"
+                    ? "bg-gray-800 text-white"
                     : "bg-neutral-100 text-black"
                 }`}
                 type="text"
@@ -217,7 +220,9 @@ const SearchRestaurant = () => {
                   </ul>
                 ) : (
                   <div className="p-4 text-center text-gray-500">
-                    {searchValue ? `No results found for "${searchValue}"` : "Start typing to search..."}
+                    {searchValue
+                      ? `No results found for "${searchValue}"`
+                      : "Start typing to search..."}
                   </div>
                 )}
               </div>
