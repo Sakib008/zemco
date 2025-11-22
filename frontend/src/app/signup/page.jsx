@@ -77,7 +77,6 @@ const Signup = () => {
     if (!validateForm()) {
       return;
     }
-    
     setIsLoading(true);
     try {
       const {firstname,lastname,username,email,password,isAdmin} = form;
