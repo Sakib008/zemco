@@ -1,0 +1,88 @@
+{
+  "E:\\Code Playground\\30-day-apps-challange\\zomato-clone\\backend\\serverless.yml": {
+    "versionFramework": "4.25.0",
+    "servicePath": "E:\\Code Playground\\30-day-apps-challange\\zomato-clone\\backend\\serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "my-backend-api",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs22.x",
+        "region": "ap-south-1",
+        "stage": "dev",
+        "versionFunctions": true
+      },
+      "functions": {
+        "app": {
+          "handler": "index.handler",
+          "events": [
+            {
+              "httpApi": "*"
+            }
+          ],
+          "name": "my-backend-api-dev-app"
+        }
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs22.x",
+      "region": "ap-south-1",
+      "stage": "dev",
+      "versionFunctions": true
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "error": {
+      "message": "Access denied when storing the parameter \"/serverless-framework/deployment/s3-bucket\". Please check your permissions and try again. You have the following options:\n• Ensure you have permission to create SSM and S3 resources.\n• Use the \"provider.deploymentBucket\" field to specify an existing S3 bucket.\n• Manually create the S3 bucket and SSM parameter.\n\nFor more details, please refer to the documentation: https://www.serverless.com/framework/docs/guides/deployment-bucket\n\nOriginal error: User: arn:aws:iam::886014715029:user/sakib1 is not authorized to perform: s3:CreateBucket on resource: \"arn:aws:s3:::serverless-framework-deployments-ap-south-1-2d48887e-ec29\" with an explicit deny in an identity-based policy",
+      "code": "DEPLOYMENT_BUCKET_INSUFFICIENT_PERMISSIONS"
+    },
+    "serviceRawFile": "service: my-backend-api\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs22.x\r\n  region: ap-south-1    # choose your preferred AWS region\r\n  stage: dev\r\n\r\nfunctions:\r\n  app:\r\n    handler: index.handler  # Change 'index' if your file has a different name\r\n    events:\r\n      - httpApi: '*'  # This creates API Gateway to handle all HTTP requests\r\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "orgId": "dbca0427-2471-412c-9543-d456233bda9d",
+    "orgName": "sakib1",
+    "userId": "7lSjH8S9cHgLq7j1vM",
+    "userName": "sakib1",
+    "serviceProviderAwsAccountId": "886014715029",
+    "serviceProviderAwsCfStackName": "my-backend-api-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-south-1:886014715029:stack/my-backend-api-dev/c02c0d70-c77c-11f0-aab6-06ac56894b25",
+    "serviceProviderAwsCfStackCreated": "2025-11-22T08:25:06.896Z",
+    "serviceProviderAwsCfStackUpdated": "2025-11-22T09:11:00.003Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "AppLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:ap-south-1:886014715029:function:my-backend-api-dev-app:3",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-my-backend-api-dev-AppLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "HttpApiId",
+        "OutputValue": "h7v78pckq9",
+        "Description": "Id of the HTTP API",
+        "ExportName": "sls-my-backend-api-dev-HttpApiId"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-ap-south-1-2d48887e-ec29",
+        "ExportName": "sls-my-backend-api-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "HttpApiUrl",
+        "OutputValue": "https://h7v78pckq9.execute-api.ap-south-1.amazonaws.com",
+        "Description": "URL of the HTTP API",
+        "ExportName": "sls-my-backend-api-dev-HttpApiUrl"
+      }
+    ]
+  }
+}

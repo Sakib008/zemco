@@ -1,0 +1,13 @@
+service: my-backend-api
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: ap-south-1    # choose your preferred AWS region
+  stage: dev
+
+functions:
+  app:
+    handler: index.handler  # Change 'index' if your file has a different name
+    events:
+      - httpApi: '*'  # This creates API Gateway to handle all HTTP requests

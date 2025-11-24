@@ -1,5 +1,6 @@
 const cors = require("cors");
 const express = require("express");
+const serverless = require("serverless-http");
 
 const cookieParser = require("cookie-parser");
 const initializeDatabase = require("./db/db.connect");
@@ -25,6 +26,11 @@ app.use("/api/restaurants", RestaurantRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/reviews", ReviewRouter);
 app.use("/api/image", ImageRouter);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: err.message });
+});
+
 
 app.get("/", (req, res) => {
   res.send("Zomato Clone is Real : See------");
@@ -32,3 +38,6 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log("Server is Running on PORT : ", PORT));
+
+
+module.exports.handler = serverless(app);
