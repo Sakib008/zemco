@@ -83,7 +83,7 @@ const FilterItem = () => {
   };
 
   return (
-    <div className={`hidden w-56 sticky top-16 md:flex shadow-xl py-6 rounded-2xl p-4 items-start justify-start flex-col h-[92vh] ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+    <div className={`hidden w-56 sticky top-16 md:m-2 md:flex shadow-xl py-6 rounded-2xl p-4 items-start justify-start flex-col h-[92vh] ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
       <div className="text-2xl font-bold my-2 flex justify-between w-full">
         <h1 className="">Filters</h1>
         <button onClick={handleClear} className="text-lg underline underline-offset-2">

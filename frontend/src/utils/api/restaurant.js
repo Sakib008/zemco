@@ -11,41 +11,25 @@ const allRestaurant = async () => {
   }
 };
 const addRestaurant = async (restaurantDetail) => {
-  if(restaurantDetail instanceof FormData){
-      return await axios.post("/restaurants", restaurantDetail, {
-      headers: { "Content-Type": "multipart/form-data" },
-      withCredentials: true,
-    });
-  }else{
-    return await axios.post('/restaurants',restaurantDetail,{
-      withCredentials : true
-    })
-  }
+  return await axios.post("/restaurants", restaurantDetail, {
+    withCredentials: true,
+  });
 };
 const singleRestaurant = async (id) => {
   return await axios.get(`/restaurants/${id}`);
 };
 const editRestaurant = async (id, updateData) => {
-  if (updateData instanceof FormData) {
-    return await axios.post(`/restaurants/${id}`, updateData, {
-      headers: { "Content-Type": "multipart/form-data" },
-      withCredentials : true
-    });
-  }
-  return await axios.post(`/restaurants/${id}`, updateData,{
-    withCredentials  : true
+  return await axios.post(`/restaurants/${id}`, updateData, {
+    withCredentials: true,
   });
 };
 const removeRestaurant = async (id) =>
-await axios.post(`/restaurants/${id}`, {
-    headers: { "Content-Type": "multipart/form-data" },
+  await axios.post(`/restaurants/${id}`, {
     withCredentials: true,
   });
 
 const addImageRestaurant = async (formData) => {
-  return await axios.post(`/image/upload`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  return await axios.post(`/image/upload`, formData);
 };
 
 export {

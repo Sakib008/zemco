@@ -71,7 +71,6 @@ const AddRestaurant = ({open,setOpen, preFilled, onUpdate, isInline = false }) =
         dataToSend.append("cuisine", form.cuisine);
         dataToSend.append("address", form.address);
         dataToSend.append("image", form.image);
-        if (form.menu) dataToSend.append("menu", JSON.stringify(form.menu));
       } else {
         dataToSend = { ...form };
       }
@@ -118,6 +117,7 @@ const AddRestaurant = ({open,setOpen, preFilled, onUpdate, isInline = false }) =
       );
     } finally {
       setLoading(false);
+      setOpen(false);
     }
   };
 

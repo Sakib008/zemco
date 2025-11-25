@@ -3,7 +3,6 @@ import { useState } from "react";
 
 const Dish = ({ dish, open, setOpen ,restaurantId }) => {
     const [openMenu, setOpenMenu] = useState(false);
-    console.log("Dish Component Rendered", restaurantId);
   return (
     <>
       {!open ? (

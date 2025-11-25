@@ -31,8 +31,8 @@ const RestaurantPage = () => {
   const fetchRestaurantData = async () => {
     if (!restaurantId) return;
 
+    setLoading(true);
     try {
-      setLoading(true);
       const {
         data: { restaurant },
         status,
@@ -57,7 +57,6 @@ const RestaurantPage = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchRestaurantData();
   }, [restaurantId]);
@@ -151,7 +150,15 @@ const RestaurantPage = () => {
       }`}
     >
       <div className="md:hidden flex justify-start items-center mx">
-        <Link href={'/restaurant'} className="bg-blue-600 px-2 py-1 mx-2 rounded-lg flex"><span><MoveLeft/></span> Back </Link>
+        <Link
+          href={"/restaurant"}
+          className="bg-blue-600 px-2 py-1 mx-2 rounded-lg flex"
+        >
+          <span>
+            <MoveLeft />
+          </span>{" "}
+          Back{" "}
+        </Link>
       </div>
       <Header />
       <div
@@ -232,9 +239,17 @@ const RestaurantPage = () => {
               <h3 className="text-xl font-semibold mb-4">Menu</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {restaurant.menu.map((dish, index) => (
-                  <div key={index} onClick={() => setOpenDishId(restaurant._id)} className="cursor-pointer">
-
-                    <Dish dish={dish} open={openDishId} setOpen={setOpenDishId} restaurantId={restaurant._id} />
+                  <div
+                    key={index}
+                    onClick={() => setOpenDishId(restaurant._id)}
+                    className="cursor-pointer"
+                  >
+                    <Dish
+                      dish={dish}
+                      open={openDishId}
+                      setOpen={setOpenDishId}
+                      restaurantId={restaurant._id}
+                    />
                   </div>
                 ))}
               </div>
