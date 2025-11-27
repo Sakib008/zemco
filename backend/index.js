@@ -15,7 +15,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000","http://localhost:3001", "https://zemco.vercel.app"],
+    origin: ["http://localhost:3000","http://localhost:3001", "https://zemco.vercel.app","https://kp4fka6atwn7fstjnshyg3ypiq0wjisi.lambda-url.us-east-1.on.aws"],
     credentials: true,
   })
 );
