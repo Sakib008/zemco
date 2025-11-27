@@ -51,7 +51,7 @@ export default function Home() {
         </div>
 
         <section className="flex flex-wrap gap-10 justify-center">
-          {state.restaurants && state.restaurants.length > 0 ? (
+          {!isLoading && state.restaurants && state.restaurants.length > 0 ? (
             state.restaurants
               .sort((a, b) => b.averageRating - a.averageRating)
               .slice(0, 5)
