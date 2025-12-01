@@ -15,7 +15,13 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000","http://localhost:3001", "https://zemco.vercel.app","https://kp4fka6atwn7fstjnshyg3ypiq0wjisi.lambda-url.us-east-1.on.aws"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://zemco.vercel.app",
+      "https://zemco.skylencedesigns.com",
+      "https://kp4fka6atwn7fstjnshyg3ypiq0wjisi.lambda-url.us-east-1.on.aws",
+    ],
     credentials: true,
   })
 );
@@ -31,13 +37,11 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message });
 });
 
-
 app.get("/", (req, res) => {
   res.send("Zomato Clone is Real : See------");
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log("Server is Running on PORT : ", PORT));
-
 
 module.exports.handler = serverless(app);
