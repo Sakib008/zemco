@@ -20,6 +20,7 @@ app.use(
       "http://localhost:3001",
       "https://zemco.vercel.app",
       "https://zemco.skylencedesigns.com",
+      "https://zemco.mohammadsakib.me",
       "https://kp4fka6atwn7fstjnshyg3ypiq0wjisi.lambda-url.us-east-1.on.aws",
     ],
     credentials: true,
